@@ -14,6 +14,22 @@ The `lirctl.yaml` configuration file can be in these directories and it loaded b
 - `/usr/local/etc/lirctl/lirctl.yaml`
 - `/etc/lirctl/lirctl.yaml`
 
+### Installation
+
+To install `lirctl(8)`:
+
+```sh
+sudo make install
+```
+
+### Uninstall
+
+To uninstall:
+
+```sh
+sudo make uninstall
+```
+
 ### Sample cron output
 
 #### Updating Filters
