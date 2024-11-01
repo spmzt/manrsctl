@@ -1,0 +1,12 @@
+config:
+  me:
+    - number: 214145
+      as-set: "AS214145:AS-BASE"
+      downstream: no
+  peers:
+    - number: 43752
+      as-set: "AS-ASIATECH"
+      downstream: yes
+    - number: 209533
+      as-set: "AS209533:AS-BGPTUNNEL"
+      downstream: yes
