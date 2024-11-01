@@ -5,17 +5,14 @@ config:
     downstream: no
     max_prefix: 10
     prefixes:
-      - 2001:db8::/48"
-      - 2001:db8::/44"
+      - "2001:db8::/48"
+      - "2001:db8::/44"
   peers:
-    - number: 43752
-      as-set: "AS-ASIATECH"
+    - number: 27500
+      as-set: "AS-ICANN"
       downstream: yes
       is_my_upstream: yes
-    - number: 209533
-      as-set: "AS209533:AS-BGPTUNNEL"
+    - number: 2121
+      as-set: "AS-RIPENCC"
       downstream: yes
-      is_my_upstream: yes
-    - number: 24381
-      downstream: no
       is_my_upstream: no

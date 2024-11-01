@@ -7,8 +7,8 @@ Usage:
   lirctl cron COMMAND
 
 Available Commands:
-    update		only update the filters.
-    full        generate full configuration.
+    update		only updates the filters, including as path lists, ipv6 prefix lists, route-maps.
+    full        generate full configuration (update + bgp configuration).
 
 Use "lirctl -v|--version" for version information.
 EOF
