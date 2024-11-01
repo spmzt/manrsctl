@@ -1,10 +1,9 @@
 #!/bin/sh
 #
 # Version
-LIRCTL_VERSION="0.0.1"
+LIRCTL_VERSION="0.1.0"
 
 . /usr/local/share/lirctl/common.sh
-find_config_file
 
 [ $# -lt 1 ] && usage
 
@@ -32,4 +31,3 @@ if [ -f "${SCRIPTPATH}" ]; then
 else
   print_error "${SCRIPTPATH} not found."
 fi
- 

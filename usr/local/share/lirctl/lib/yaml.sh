@@ -1,53 +1,15 @@
 #!/bin/sh
 
-# Variables
-# shyaml path
-SHYAML="python3 -m shyaml"
-
-
-find_config_file()
-{
-	export LIRCTL_CONF;
-	if [ -f $HOME/.config/lirctl/lirctl.yaml ]
-	then
-		LIRCTL_CONF="$(realpath $HOME/.config/lirctl/lirctl.yaml)"
-	elif [ -f /usr/local/etc/lirctl/lirctl.yaml ]
-	then
-		LIRCTL_CONF="$(realpath /usr/local/etc/lirctl/lirctl.yaml)"
-	elif [ -f /etc/lirctl/lirctl.yaml ]
-	then
-		LIRCTL_CONF="$(realpath /etc/lirctl/lirctl.yaml)"
-	elif [ -f ./lirctl.yaml ]
-	then
-		LIRCTL_CONF="$(realpath ./lirctl.yaml)"
-	else
-		echo "libfrr -> Error: Can't find configuration file."
-		exit 1
-	fi
-
-	#set -x
-	# File Validation
-	#$SHYAML -q keys < $LIRCTL_FILE | grep config || (echo "lirctl -> Error: Invalid configuration." && exit 1)
-}
-
 parse_yaml()
 {
-	$SHYAML $@ < $LIRCTL_CONF
-}
-
-get_peer_length()
-{
-	#local length="$(parse_yaml get-length config.peers)
-	export PEER_LEN="$(parse_yaml get-length config.peers)"
-	export PEER_LEN0="$(expr $PEER_LEN - 1)"
+	python3 -m shyaml $@ < $LIRCTL_CONF
 }
 
 get_asn_lists()
 {
 	for peer in $(seq 0 $PEER_LEN0)
 	do
-		parse_yaml get-value config.peers.$peer.number
-		echo
+		echo "$(parse_yaml get-value config.peers.$peer.number)"
 	done
 }
 
@@ -71,4 +33,28 @@ get_asn_without_downstream_lists()
 			echo "$(parse_yaml get-value config.peers.$peer.number)"
 		fi
 	done
+}
+
+get_my_prefixes()
+{
+	parse_yaml get-values config.me.prefixes
+}
+
+get_peer_upstream_bool()
+{
+	IS_VALUE_EXIST=false
+	for peer in $(seq 0 $PEER_LEN0)
+	do
+		if [ "$(parse_yaml get-value config.peers.$peer.number)" = "$1" ]
+		then
+			parse_yaml get-value config.peers.$peer.is_my_upstream
+			IS_VALUE_EXIST=true
+			break
+		fi
+	done
+	if ! $IS_VALUE_EXIST
+	then
+		echo "lirctl -> Error: is_my_upstream can be yes or no."
+		exit 1
+	fi 
 }

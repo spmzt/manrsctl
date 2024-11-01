@@ -6,8 +6,6 @@ to_lower() {
   echo $1 | tr '[:upper:]' '[:lower:]'
 }
 
-NAME_L="$(to_lower ${NAME})"
-
 print_error() {
   local RED='\033[0;31m'
   local NC='\033[0m' # No Color

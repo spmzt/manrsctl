@@ -1,0 +1,21 @@
+config:
+  me:
+    number: 214145
+    as-set: "AS214145:AS-BASE"
+    downstream: no
+    max_prefix: 10
+    prefixes:
+      - 2001:db8::/48"
+      - 2001:db8::/44"
+  peers:
+    - number: 43752
+      as-set: "AS-ASIATECH"
+      downstream: yes
+      is_my_upstream: yes
+    - number: 209533
+      as-set: "AS209533:AS-BGPTUNNEL"
+      downstream: yes
+      is_my_upstream: yes
+    - number: 24381
+      downstream: no
+      is_my_upstream: no
