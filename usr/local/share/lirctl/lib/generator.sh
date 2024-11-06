@@ -21,8 +21,8 @@ in_nods_v6_gen()
 # Generate import as path list from $1 AS with $2 as-set
 in_nods_aspath_gen()
 {
-	echo "no ip as-path access-list IMPORT_ASN_FROM_AS$1"
-	echo "ip as-path access-list IMPORT_ASN_FROM_AS$1 deny .*"
+	echo "no bgp as-path access-list IMPORT_ASN_FROM_AS$1"
+	echo "bgp as-path access-list IMPORT_ASN_FROM_AS$1 deny .*"
 }
 
 # Generate export prefix list from my AS with downstream
