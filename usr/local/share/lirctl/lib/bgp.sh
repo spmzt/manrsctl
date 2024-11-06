@@ -25,10 +25,10 @@ address-family ipv6 unicast
   neighbor AS$1 soft-reconfiguration inbound
   neighbor AS$1 route-map IMPORT_RTMV6_FROM_AS$1 in
   neighbor AS$1 route-map EXPORT_RTMV6_TO_AS$1 out
-  neighbot AS$1 filter-list $UPSTREAM_ASN_LINE in
-  neighbot AS$1 prefix-list $UPSTREAM_IPV6_LINE in
-  neighbot AS$1 prefix-list EXPORT_IPV6_TO_AS$1 out
-  neighbot AS$1 maximum-prefix-out $2
+  neighbor AS$1 filter-list $UPSTREAM_ASN_LINE in
+  neighbor AS$1 prefix-list $UPSTREAM_IPV6_LINE in
+  neighbor AS$1 prefix-list EXPORT_IPV6_TO_AS$1 out
+  neighbor AS$1 maximum-prefix-out $2
   neighbor AS$1 activate
   exit
 exit
