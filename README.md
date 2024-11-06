@@ -261,10 +261,10 @@ address-family ipv6 unicast
   neighbor AS2121 soft-reconfiguration inbound
   neighbor AS2121 route-map IMPORT_RTMV6_FROM_AS2121 in
   neighbor AS2121 route-map EXPORT_RTMV6_TO_AS2121 out
-  neighbot AS2121 filter-list IMPORT_ASN_FROM_AS2121 in
-  neighbot AS2121 prefix-list IMPORT_IPV6_FROM_AS2121 in
-  neighbot AS2121 prefix-list EXPORT_IPV6_TO_AS2121 out
-  neighbot AS2121 maximum-prefix-out 10
+  neighbor AS2121 filter-list IMPORT_ASN_FROM_AS2121 in
+  neighbor AS2121 prefix-list IMPORT_IPV6_FROM_AS2121 in
+  neighbor AS2121 prefix-list EXPORT_IPV6_TO_AS2121 out
+  neighbor AS2121 maximum-prefix-out 10
   neighbor AS2121 activate
   exit
 exit
