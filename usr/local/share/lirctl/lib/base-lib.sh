@@ -41,6 +41,7 @@ Usage:
 
 Available Commands:
   cron   prepare and updates BGP filters.
+  ipv6   provide IPv6 utilities (e.g random host address).
 
 Use "lirctl -v|--version" for version information.
 Use "lirctl command -h|--help" for more information about a command.

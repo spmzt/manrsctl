@@ -15,3 +15,4 @@ load_config_file
 
 # Depends on libraries above
 . /usr/local/share/lirctl/lib/cron-lib.sh
+. /usr/local/share/lirctl/lib/ipv6-lib.sh

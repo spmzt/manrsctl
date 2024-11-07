@@ -30,7 +30,64 @@ To uninstall:
 sudo make uninstall
 ```
 
-### Sample cron output
+
+### Configuration
+
+Under `config`, use `me` for your own AS information, and use `peers` for your peers' information.
+
+#### me
+
+Here are the `me` parameters:
+
+- `number`: Your ASN
+- `as-set`: Your downstream AS set
+- `downstream`: Do you have any downstream? [yes/no]
+- `max_prefix`: Your maximum number of prefixes that you plan to advertise
+- `prefixes`: List of your current prefixes that you want to advertise
+
+#### peers
+
+Add each peer configuration as a list. Here are the possible parameters for each `peer`:
+
+- `number`: Peer ASN
+- `downstream`: Does your peer have any downstream? [yes/no]
+- `as-set`: If the `downstream` is `yes`, does your peer have any downstream AS set?
+- `is_my_upstream`: Is it your upstream?
+
+#### Configuration Example
+
+```yaml
+config:
+  me:
+    number: 214145
+    as-set: "AS214145:AS-BASE"
+    downstream: no
+    max_prefix: 10
+    prefixes:
+      - "2001:db8::/48"
+      - "2001:db8::/44"
+  peers:
+    - number: 27500
+      as-set: "AS-ICANN"
+      downstream: yes
+      is_my_upstream: yes
+    - number: 2121
+      as-set: "AS-RIPENCC"
+      downstream: yes
+      is_my_upstream: no
+```
+
+### IPv6
+
+#### Random Generator
+
+To generate random host (/64) address:
+
+```sh
+lirctl ipv6 rand
+```
+
+### Cron
 
 #### Updating Filters
 
