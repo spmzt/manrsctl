@@ -80,6 +80,72 @@ bgp as-path access-list BOGON_ASN seq 105 permit .*
 "
 }
 
+bogon_rev_aspath_get()
+{
+	echo "
+bgp as-path access-list BOGON_REV_ASN seq 5 permit _0_
+bgp as-path access-list BOGON_REV_ASN seq 10 permit _23456_
+bgp as-path access-list BOGON_REV_ASN seq 15 permit _6449[6-9]_
+bgp as-path access-list BOGON_REV_ASN seq 20 permit _64[5-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 25 permit _6[5-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 30 permit _[7-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 35 permit _1[0-2][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 40 permit _130[0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 45 permit _1310[0-6][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 50 permit _13107[0-1]_
+bgp as-path access-list BOGON_REV_ASN seq 55 permit _45875[2-9]_
+bgp as-path access-list BOGON_REV_ASN seq 60 permit _4587[6-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 65 permit _458[8-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 70 permit _459[0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 75 permit _4[6-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 80 permit _[5-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 85 permit _[0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 90 permit _[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 95 permit _[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 100 permit _[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 105 deny .*
+"
+}
+
+bogon_prefixlist_v4_get()
+{
+	echo "
+ip prefix-list BOGON_v4 deny 0.0.0.0/8 le 32
+ip prefix-list BOGON_v4 deny 10.0.0.0/8 le 32
+ip prefix-list BOGON_v4 deny 100.64.0.0/10 le 32
+ip prefix-list BOGON_v4 deny 127.0.0.0/8 le 32
+ip prefix-list BOGON_v4 deny 169.254.0.0/16 le 32
+ip prefix-list BOGON_v4 deny 172.16.0.0/12 le 32
+ip prefix-list BOGON_v4 deny 192.0.2.0/24 le 32
+ip prefix-list BOGON_v4 deny 192.88.99.0/24 le 32
+ip prefix-list BOGON_v4 deny 192.168.0.0/16 le 32
+ip prefix-list BOGON_v4 deny 198.18.0.0/15 le 32
+ip prefix-list BOGON_v4 deny 198.51.100.0/24 le 32
+ip prefix-list BOGON_v4 deny 203.0.113.0/24 le 32
+ip prefix-list BOGON_v4 deny 224.0.0.0/4 le 32
+ip prefix-list BOGON_v4 deny 240.0.0.0/4 le 32
+"
+}
+
+bogon_prefixlist_v6_get()
+{
+	echo "
+ipv6 prefix-list BOGON_v6 deny ::/8 le 128
+ipv6 prefix-list BOGON_v6 deny 100::/64 le 128
+ipv6 prefix-list BOGON_v6 deny 2001:2::/48 le 128
+ipv6 prefix-list BOGON_v6 deny 2001:10::/28 le 128
+ipv6 prefix-list BOGON_v6 deny 2001:db8::/32 le 128
+ipv6 prefix-list BOGON_v6 deny 3fff::/20 le 128
+ipv6 prefix-list BOGON_v6 deny 2002::/16 le 128
+ipv6 prefix-list BOGON_v6 deny 3ffe::/16 le 128
+ipv6 prefix-list BOGON_v6 deny 5f00::/16 le 128
+ipv6 prefix-list BOGON_v6 deny fc00::/7 le 128
+ipv6 prefix-list BOGON_v6 deny fe80::/10 le 128
+ipv6 prefix-list BOGON_v6 deny fec0::/10 le 128
+ipv6 prefix-list BOGON_v6 deny ff00::/8 le 128
+"
+}
+
 # Generate import route-map from $1 based on being our upstream or not $2
 in_rtm_v6_gen()
 {
@@ -97,6 +163,21 @@ in_rtm_v6_gen()
 	fi
 
 	echo "
+route-map IMPORT_RTMV6_FROM_AS$1 deny 1
+ description Drop Invalid RPKI
+ match rpki invalid
+exit
+!
+route-map IMPORT_RTMV6_FROM_AS$1 deny 2
+ description Drop Bogon Prefixlist
+ match ipv6 address prefix-list BOGON_v6
+exit
+!
+route-map IMPORT_RTMV6_FROM_AS$1 deny 3
+ description Drop Bogon AS Path
+ match as-path BOGON_REV_ASN
+exit
+!
 route-map IMPORT_RTMV6_FROM_AS$1 permit 10
  description Import any valid RPKI from $1
  match rpki valid
@@ -106,18 +187,13 @@ route-map IMPORT_RTMV6_FROM_AS$1 permit 10
  set local-preference 30
 exit
 !
-route-map IMPORT_RTMV6_FROM_AS$1 permit 15
+route-map IMPORT_RTMV6_FROM_AS$1 permit 20
  description Import any prefix that not found in RPKI db from $1 with lower pref
  match rpki notfound
  match ipv6 address prefix-list $UPSTREAM_IPV6_LINE
  match as-path $UPSTREAM_ASN_LINE
  match as-path BOGON_ASN
  set local-preference 20
-exit
-!
-route-map IMPORT_RTMV6_FROM_AS$1 deny 20
- description Reject any prefix that is not valid in RPKI db from $1
- match rpki invalid
 exit
 !
 route-map IMPORT_RTMV6_FROM_AS$1 deny 99
@@ -131,6 +207,21 @@ exit
 out_rtm_v6_gen()
 {
 	echo "
+route-map EXPORT_RTMV6_TO_AS$1 deny 1
+ description Drop Invalid RPKI
+ match rpki invalid
+exit
+!
+route-map EXPORT_RTMV6_TO_AS$1 deny 2
+ description Drop Bogon Prefixlist
+ match ipv6 address prefix-list BOGON_v6
+exit
+!
+route-map EXPORT_RTMV6_TO_AS$1 deny 3
+ description Drop Bogon AS Path
+ match as-path BOGON_REV_ASN
+exit
+!
 route-map EXPORT_RTMV6_TO_AS$1 permit 10
  description Export netwroks with valid RPKI
  match ipv6 address prefix-list EXPORT_IPV6_FROM_AS$1

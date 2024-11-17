@@ -11,6 +11,9 @@ esac
 if [ "$1" = "update" ]
 then
     cron_update
+elif [ "$1" = "bogon" ]
+then
+	cron_bogon
 elif [ "$1" = "full" ]
 then
 	cron_full

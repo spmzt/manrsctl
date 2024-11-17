@@ -8,11 +8,27 @@ Usage:
 
 Available Commands:
     update		only updates the filters, including as path lists, ipv6 prefix lists, route-maps.
+    bogon       only updates the bogon filters, including as path lists, ipv6 prefix lists.
     full        generate full configuration (update + bgp configuration).
 
 Use "lirctl -v|--version" for version information.
 EOF
     exit 1
+}
+
+cron_bogon()
+{
+    bogon_aspath_get
+    echo
+
+    bogon_rev_aspath_get
+    echo
+
+    bogon_prefixlist_v6_get
+    echo
+
+    bogon_prefixlist_v4_get
+    echo
 }
 
 cron_update()
@@ -36,8 +52,7 @@ cron_update()
     any_aspath_gen
     echo
 
-    bogon_aspath_get
-    echo
+    cron_bogon
 
     get_asn_with_downstream_lists | while read peer
     do

@@ -93,6 +93,10 @@ lirctl ipv6 rand
 
 To update the as path lists, prefix lists, and the route-maps, use `lirctl cron update`.
 
+#### Updating Bogon Filters
+
+To update the Bogon as-path lists, and prefix lists use `lirctl cron bogon`.
+
 #### Full BGP Configuration
 
 To generate the full configuration (with bgp neighborships), use `lirctl cron full`.
@@ -111,6 +115,20 @@ ipv6 prefix-list EXPORT_IPV6_NETWORK seq 20 permit 2001:db8::/44
 
 ipv6 prefix-list ANY_IPV6 description ALL IPv6 ranges
 ipv6 prefix-list ANY_IPV6 seq 10 permit any
+
+ipv6 prefix-list BOGON_v6 deny ::/8 le 128
+ipv6 prefix-list BOGON_v6 deny 100::/64 le 128
+ipv6 prefix-list BOGON_v6 deny 2001:2::/48 le 128
+ipv6 prefix-list BOGON_v6 deny 2001:10::/28 le 128
+ipv6 prefix-list BOGON_v6 deny 2001:db8::/32 le 128
+ipv6 prefix-list BOGON_v6 deny 3fff::/20 le 128
+ipv6 prefix-list BOGON_v6 deny 2002::/16 le 128
+ipv6 prefix-list BOGON_v6 deny 3ffe::/16 le 128
+ipv6 prefix-list BOGON_v6 deny 5f00::/16 le 128
+ipv6 prefix-list BOGON_v6 deny fc00::/7 le 128
+ipv6 prefix-list BOGON_v6 deny fe80::/10 le 128
+ipv6 prefix-list BOGON_v6 deny fec0::/10 le 128
+ipv6 prefix-list BOGON_v6 deny ff00::/8 le 128
 
 bgp as-path access-list ANY_ASN permit .*
 
@@ -135,6 +153,28 @@ bgp as-path access-list BOGON_ASN seq 90 deny _[0-9][0-9][0-9][0-9][0-9][0-9][0-
 bgp as-path access-list BOGON_ASN seq 95 deny _[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
 bgp as-path access-list BOGON_ASN seq 100 deny _[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
 bgp as-path access-list BOGON_ASN seq 105 permit .*
+
+bgp as-path access-list BOGON_REV_ASN seq 5 permit _0_
+bgp as-path access-list BOGON_REV_ASN seq 10 permit _23456_
+bgp as-path access-list BOGON_REV_ASN seq 15 permit _6449[6-9]_
+bgp as-path access-list BOGON_REV_ASN seq 20 permit _64[5-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 25 permit _6[5-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 30 permit _[7-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 35 permit _1[0-2][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 40 permit _130[0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 45 permit _1310[0-6][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 50 permit _13107[0-1]_
+bgp as-path access-list BOGON_REV_ASN seq 55 permit _45875[2-9]_
+bgp as-path access-list BOGON_REV_ASN seq 60 permit _4587[6-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 65 permit _458[8-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 70 permit _459[0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 75 permit _4[6-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 80 permit _[5-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 85 permit _[0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 90 permit _[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 95 permit _[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 100 permit _[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_
+bgp as-path access-list BOGON_REV_ASN seq 105 deny .*
 
 no ipv6 prefix-list IMPORT_IPV6_FROM_AS27500
 ipv6 prefix-list IMPORT_IPV6_FROM_AS27500 permit 2001:4:112::/48
@@ -214,6 +254,21 @@ no ip as-path access-list IMPORT_ASN_FROM_AS2121
 ip as-path access-list IMPORT_ASN_FROM_AS2121 permit ^2121(_2121)*$
 ip as-path access-list IMPORT_ASN_FROM_AS2121 permit ^2121(_[0-9]+)*_(3333|12654)$
 
+route-map IMPORT_RTMV6_FROM_AS27500 deny 1
+ description Drop Invalid RPKI
+ match rpki invalid
+exit
+!
+route-map IMPORT_RTMV6_FROM_AS27500 deny 2
+ description Drop Bogon Prefixlist
+ match ipv6 address prefix-list BOGON_v6
+exit
+!
+route-map IMPORT_RTMV6_FROM_AS27500 deny 3
+ description Drop Bogon AS Path
+ match as-path BOGON_REV_ASN
+exit
+!
 route-map IMPORT_RTMV6_FROM_AS27500 permit 10
  description Import any valid RPKI from 27500
  match rpki valid
@@ -223,7 +278,7 @@ route-map IMPORT_RTMV6_FROM_AS27500 permit 10
  set local-preference 30
 exit
 !
-route-map IMPORT_RTMV6_FROM_AS27500 permit 15
+route-map IMPORT_RTMV6_FROM_AS27500 permit 20
  description Import any prefix that not found in RPKI db from 27500 with lower pref
  match rpki notfound
  match ipv6 address prefix-list ANY_IPV6
@@ -242,6 +297,21 @@ route-map IMPORT_RTMV6_FROM_AS27500 deny 99
  match ipv6 address prefix-list ANY_IPV6
 exit
 
+route-map EXPORT_RTMV6_TO_AS27500 deny 1
+ description Drop Invalid RPKI
+ match rpki invalid
+exit
+!
+route-map EXPORT_RTMV6_TO_AS27500 deny 2
+ description Drop Bogon Prefixlist
+ match ipv6 address prefix-list BOGON_v6
+exit
+!
+route-map EXPORT_RTMV6_TO_AS27500 deny 3
+ description Drop Bogon AS Path
+ match as-path BOGON_REV_ASN
+exit
+!
 route-map EXPORT_RTMV6_TO_AS27500 permit 10
  description Export netwroks with valid RPKI
  match ipv6 address prefix-list EXPORT_IPV6_FROM_AS27500
@@ -254,6 +324,21 @@ route-map EXPORT_RTMV6_TO_AS27500 deny 99
  match ipv6 address prefix-list ANY_IPV6
 exit
 
+route-map IMPORT_RTMV6_FROM_AS2121 deny 1
+ description Drop Invalid RPKI
+ match rpki invalid
+exit
+!
+route-map IMPORT_RTMV6_FROM_AS2121 deny 2
+ description Drop Bogon Prefixlist
+ match ipv6 address prefix-list BOGON_v6
+exit
+!
+route-map IMPORT_RTMV6_FROM_AS2121 deny 3
+ description Drop Bogon AS Path
+ match as-path BOGON_REV_ASN
+exit
+!
 route-map IMPORT_RTMV6_FROM_AS2121 permit 10
  description Import any valid RPKI from 2121
  match rpki valid
@@ -263,7 +348,7 @@ route-map IMPORT_RTMV6_FROM_AS2121 permit 10
  set local-preference 30
 exit
 !
-route-map IMPORT_RTMV6_FROM_AS2121 permit 15
+route-map IMPORT_RTMV6_FROM_AS2121 permit 20
  description Import any prefix that not found in RPKI db from 2121 with lower pref
  match rpki notfound
  match ipv6 address prefix-list IMPORT_IPV6_FROM_AS2121
@@ -272,16 +357,26 @@ route-map IMPORT_RTMV6_FROM_AS2121 permit 15
  set local-preference 20
 exit
 !
-route-map IMPORT_RTMV6_FROM_AS2121 deny 20
- description Reject any prefix that is not valid in RPKI db from 2121
- match rpki invalid
-exit
-!
 route-map IMPORT_RTMV6_FROM_AS2121 deny 99
  description Reject any prefix from 2121
  match ipv6 address prefix-list ANY_IPV6
 exit
 
+route-map EXPORT_RTMV6_TO_AS2121 deny 1
+ description Drop Invalid RPKI
+ match rpki invalid
+exit
+!
+route-map EXPORT_RTMV6_TO_AS2121 deny 2
+ description Drop Bogon Prefixlist
+ match ipv6 address prefix-list BOGON_v6
+exit
+!
+route-map EXPORT_RTMV6_TO_AS2121 deny 3
+ description Drop Bogon AS Path
+ match as-path BOGON_REV_ASN
+exit
+!
 route-map EXPORT_RTMV6_TO_AS2121 permit 10
  description Export netwroks with valid RPKI
  match ipv6 address prefix-list EXPORT_IPV6_FROM_AS2121
