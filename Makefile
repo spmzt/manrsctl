@@ -21,8 +21,8 @@ deps:
 	@echo "Install python applications"
 	@pip install -r requirements.txt
 
-.PHONY: installonly
-installonly:
+.PHONY: install
+install:
 	@echo "Installing lirctl"
 	@echo
 	@cp -Rv usr /
@@ -37,8 +37,8 @@ installonly:
 		echo "\tcp /usr/local/etc/lirctl/lirctl.yaml.sample /usr/local/etc/lirctl/lirctl.yaml";\
 	fi
 
-.PHONY: install
-install: deps
+.PHONY: installonly
+installonly: deps
 	@echo "Installing lirctl"
 	@echo
 	@cp -Rv usr /

@@ -39,6 +39,14 @@ ipv6 prefix-list ANY_IPV6 seq 10 permit any
 "
 }
 
+# Generate prefix list that matches with any ipv4
+any_ipv4_gen() {
+  echo "
+ip prefix-list ANY_IPV4 description ALL IPv4 ranges
+ip prefix-list ANY_IPV4 seq 10 permit any
+"
+}
+
 # Generate as path list that matches with any asn
 any_aspath_gen() {
   echo "bgp as-path access-list ANY_ASN permit .*"

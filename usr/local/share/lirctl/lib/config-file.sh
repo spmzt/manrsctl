@@ -13,7 +13,7 @@ find_config_file()
 	then
 		LIRCTL_CONF="$(realpath /etc/lirctl/lirctl.yaml)"
 	else
-		echo "libfrr -> Error: Can't find configuration file."
+		echo "lirctl -> Error: Can't find configuration file."
 		exit 1
 	fi
 
