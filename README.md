@@ -136,3 +136,11 @@ Check the wiki section of Github for more information.
 - In helpers, we use `_get` for functions and `_list` for groups of functions.
 - We define IPv4-specific codes as `_v4_`, but we do not define specific function names for IPv6-specific codes.
 - We use `_ds_` in function names for those that have downstreams, and `_nods_` for those that don't have downstreams.
+
+### Todo
+
+Add EDROP:
+
+- <https://www.spamhaus.org/drop/drop_v6.json>
+- <https://www.spamhaus.org/drop/drop_v4.json>
+- <https://www.spamhaus.org/drop/asndrop.json>
