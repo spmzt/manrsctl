@@ -5,8 +5,8 @@ bgp_neighbor_peergroup_v6_create()
 {
   if [ "$3" = "True" ]
 	then
-		UPSTREAM_ASN_LINE="ANY_ASN"
-		UPSTREAM_IPV6_LINE="ANY_IPV6"
+		UPSTREAM_ASN_LINE="ASP_ANY"
+		UPSTREAM_IPV6_LINE="PFL_ANY"
 	elif [ "$3" = "False" ]
 	then
 		UPSTREAM_ASN_LINE="IMPORT_ASN_FROM_AS$1"
@@ -16,10 +16,11 @@ bgp_neighbor_peergroup_v6_create()
 		exit 1
 	fi
 
-    echo "
-router bgp $MY_ASN
+    echo "router bgp $MY_ASN
 neighbor AS$1 peer-group
 neighbor AS$1 remote-as $1
+neighbor AS$1 send-community both
+neighbor AS$1 capability dynamic
 address-family ipv6 unicast
   neighbor AS$1 remove-private-AS
   neighbor AS$1 soft-reconfiguration inbound
@@ -31,6 +32,5 @@ address-family ipv6 unicast
   neighbor AS$1 maximum-prefix-out $2
   neighbor AS$1 activate
   exit
-exit
-"
+exit"
 }

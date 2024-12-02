@@ -5,14 +5,17 @@
 . /usr/local/share/lirctl/lib/base-lib.sh
 
 # Load the configuration file
-. /usr/local/share/lirctl/lib/config-file.sh
-load_config_file
+. /usr/local/share/lirctl/lib/cfg.sh
+cfg_load
 
+# Helpers
 . /usr/local/share/lirctl/lib/yaml.sh
 . /usr/local/share/lirctl/lib/frr.sh
-. /usr/local/share/lirctl/lib/generator.sh
+. /usr/local/share/lirctl/lib/rtm.sh
 . /usr/local/share/lirctl/lib/bgp.sh
+. /usr/local/share/lirctl/lib/asp.sh
 
-# Depends on libraries above
+# Libraries
+. /usr/local/share/lirctl/lib/bgp-lib.sh
 . /usr/local/share/lirctl/lib/cron-lib.sh
 . /usr/local/share/lirctl/lib/ipv6-lib.sh

@@ -40,6 +40,7 @@ Usage:
   lirctl command [args]
 
 Available Commands:
+  bgp    prepare and setup BGP configurations.
   cron   prepare and updates BGP filters.
   ipv6   provide IPv6 utilities (e.g random host address).
 

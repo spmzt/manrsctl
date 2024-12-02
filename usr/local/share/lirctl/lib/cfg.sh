@@ -1,17 +1,18 @@
 #!/bin/sh
 
-find_config_file()
+# Find config file
+cfg_get()
 {
 	export LIRCTL_CONF;
 	if [ -f $HOME/.config/lirctl/lirctl.yaml ]
 	then
-		LIRCTL_CONF="$(realpath $HOME/.config/lirctl/lirctl.yaml)"
+		echo $(realpath $HOME/.config/lirctl/lirctl.yaml)
 	elif [ -f /usr/local/etc/lirctl/lirctl.yaml ]
 	then
-		LIRCTL_CONF="$(realpath /usr/local/etc/lirctl/lirctl.yaml)"
+		echo $(realpath /usr/local/etc/lirctl/lirctl.yaml)
 	elif [ -f /etc/lirctl/lirctl.yaml ]
 	then
-		LIRCTL_CONF="$(realpath /etc/lirctl/lirctl.yaml)"
+		echo $(realpath /etc/lirctl/lirctl.yaml)
 	else
 		echo "lirctl -> Error: Can't find configuration file."
 		exit 1
@@ -22,17 +23,20 @@ find_config_file()
 	#$SHYAML -q keys < $LIRCTL_FILE | grep config || (echo "lirctl -> Error: Invalid configuration." && exit 1)
 }
 
-get_my_asn()
+# What is my AS number?
+my_asn_get()
 {
 	python3 -m shyaml get-value config.me.number < $LIRCTL_CONF
 }
 
-get_my_as_set()
+# What is my as-set?
+my_ass_get()
 {
 	python3 -m shyaml get-value config.me.as-set < $LIRCTL_CONF
 }
 
-get_max_prefix()
+# What is my maximum number of outgoing prefixes
+my_max_prefix_get()
 {
 	python3 -m shyaml get-value config.me.max_prefix < $LIRCTL_CONF
 }
@@ -42,15 +46,15 @@ get_my_downstream_bool()
 	python3 -m shyaml get-value config.me.downstream < $LIRCTL_CONF
 }
 
-load_config_file()
+# Load my configuration file
+cfg_load()
 {
     # Variables
-    find_config_file
-
-    export MY_ASN="$(get_my_asn)"
-	export MY_AS_SET="$(get_my_as_set)"
+	export LIRCTL_CONF="$(cfg_get)"
+    export MY_ASN="$(my_asn_get)"
+	export MY_AS_SET="$(my_ass_get)"
 	export HAVE_DOWNSTREAM="$(get_my_downstream_bool)"
-    export MAX_PREFIX="$(get_max_prefix)"
+    export MAX_PREFIX="$(my_max_prefix_get)"
     export PEER_LEN="$(python3 -m shyaml get-length config.peers 0 < $LIRCTL_CONF)"
 
     if [ "$PEER_LEN" = 0 ]

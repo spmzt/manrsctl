@@ -18,65 +18,41 @@ EOF
 
 cron_bogon()
 {
-    bogon_aspath_get
-    echo
-
-    bogon_rev_aspath_get
-    echo
-
-    bogon_prefixlist_v6_get
-    echo
-
-    bogon_prefixlist_v4_get
-    echo
+    bogon_asp_list
+    bogon_pfl_list
 }
 
 cron_update()
 {
     # Should be first due to value validation
-    out_my_v6_gen $HAVE_DOWNSTREAM
+    myself_out_pfl_get $HAVE_DOWNSTREAM
     echo 
-
-    echo "ipv6 prefix-list EXPORT_IPV6_NETWORK description my IPv6 prefixes that we want to advertise"
-    seq_num=10
-    get_my_prefixes | while read prefix
-    do
-        echo "ipv6 prefix-list EXPORT_IPV6_NETWORK seq $seq_num permit $prefix"
-        seq_num="$(expr $seq_num + 10)"
-    done
-    echo
-
-    any_ipv6_gen
-    echo
-
-    any_aspath_gen
-    echo
 
     cron_bogon
 
     get_asn_with_downstream_lists | while read peer
     do
-        in_ds_v6_gen $peer
+        ds_in_pfl_get $peer
         echo
-        in_ds_aspath_gen $peer
+        in_ds_asp_get $peer
         echo
     done
     echo
         
     get_asn_without_downstream_lists | while read peer
     do
-        in_nods_v6_gen $peer
+        nods_in_pfl_get $peer
         echo
-        in_nods_aspath_gen $peer
+        in_nods_asp_get $peer
         echo
     done
     echo
 
     get_asn_lists | while read peer
     do
-        in_rtm_v6_gen $peer "$(get_peer_upstream_bool $peer)"
+        in_rtm_get $peer "$(get_peer_upstream_bool $peer)"
         echo
-        out_rtm_v6_gen $peer
+        out_rtm_get $peer
         echo
     done
     echo

@@ -7,12 +7,11 @@ config:
     prefixes:
       - "2001:db8::/48"
       - "2001:db8::/44"
-  peers:
+  ixp:
+  upstream:
     - number: 27500
       as-set: "AS-ICANN"
-      downstream: yes
-      is_my_upstream: yes
     - number: 2121
       as-set: "AS-RIPENCC"
-      downstream: yes
-      is_my_upstream: no
+  downstream:
+  peers:
