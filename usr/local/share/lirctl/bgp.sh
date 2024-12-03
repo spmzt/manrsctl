@@ -11,9 +11,14 @@ esac
 if [ "$1" = "filters" ]
 then
     bgp_filters
-elif [ "$1" = "bogon" ]
+elif [ "$1" = "peers" ]
 then
-	cron_bogon
+    if [ "$2" = "only" ];
+    then
+        bgp_peers_only
+    else
+        bgp_peers
+    fi
 else
     bgp_usage
 fi

@@ -9,13 +9,13 @@
 cfg_load
 
 # Helpers
-. /usr/local/share/lirctl/lib/yaml.sh
 . /usr/local/share/lirctl/lib/frr.sh
 . /usr/local/share/lirctl/lib/rtm.sh
 . /usr/local/share/lirctl/lib/bgp.sh
 . /usr/local/share/lirctl/lib/asp.sh
+. /usr/local/share/lirctl/lib/pfl.sh
 
 # Libraries
-. /usr/local/share/lirctl/lib/bgp-lib.sh
-. /usr/local/share/lirctl/lib/cron-lib.sh
 . /usr/local/share/lirctl/lib/ipv6-lib.sh
+. /usr/local/share/lirctl/lib/cron-lib.sh
+. /usr/local/share/lirctl/lib/bgp-lib.sh

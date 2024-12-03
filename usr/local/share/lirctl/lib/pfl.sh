@@ -60,7 +60,7 @@ ip prefix-list PFL_V4_BOGON deny 240.0.0.0/4 le 32"
 myself_out_pfl_get() {
     echo "ipv6 prefix-list EXPORT_IPV6_NETWORK description my IPv6 prefixes that we want to advertise"
     seq_num=10
-    get_my_prefixes | while read prefix
+    myself_prefixes_yml_get | while read prefix
     do
         echo "ipv6 prefix-list EXPORT_IPV6_NETWORK seq $seq_num permit $prefix"
         seq_num="$(expr $seq_num + 10)"
@@ -69,34 +69,22 @@ myself_out_pfl_get() {
 
 # Generate import prefix list from $1 AS with $2 as-set
 ds_in_pfl_get() {
-  bgpq3 -m 48 -A6l IMPORT_IPV6_FROM_AS$1 $2
+  bgpq3 -m 48 -A6l IMPORT_IPV6_FROM_$1 $2
 }
 
 # Generate import prefix list from $1 AS without downstream
 nods_in_pfl_get() {
-  bgpq3 -m 48 -A6l IMPORT_IPV6_FROM_AS$1 AS$1
+  bgpq3 -m 48 -A6l IMPORT_IPV6_FROM_$1 $1
 }
 
 # Generate export prefix list from my AS with downstream
 myself_ds_out_pfl_get() {
-  bgpq3 -Dl EXPORT_IPV6_FROM_AS$MY_ASN -f $MY_ASN $MY_AS_SET
+  bgpq3 -m48 -A6l EXPORT_IPV6_FROM_AS$MY_ASN AS$MY_ASN
 }
 
 # Generate import prefix list from my AS without downstream
 myself_nods_out_pfl_get() {
   bgpq3 -m 48 -A6l IMPORT_IPV6_FROM_AS$MY_ASN AS$MY_ASN
-}
-
-# Generate export ipv6 prefix list from my ASN based on DOWNSTREAM value ($1)
-myself_out_pfl_get() {
-  if [ "$1" = "True" ]; then
-    myself_ds_out_pfl_get
-  elif [ "$1" = "False" ]; then
-    myself_nods_out_pfl_get
-  else
-    echo "lirctl -> Error: You can set your downstream value to only yes or no"
-    exit 1
-  fi
 }
 
 bogon_pfl_list() {
@@ -123,6 +111,7 @@ static_pfl_list() {
 
 dynamic_pfl_list() {
     myself_out_pfl_get
+    myself_ds_out_pfl_get
     echo
 }
 

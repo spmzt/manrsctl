@@ -30,7 +30,6 @@ To uninstall:
 sudo make uninstall
 ```
 
-
 ### Configuration
 
 Under `config`, use `me` for your own AS information, and use `peers` for your peers' information.
@@ -41,41 +40,32 @@ Here are the `me` parameters:
 
 - `number`: Your ASN
 - `as-set`: Your downstream AS set
-- `downstream`: Do you have any downstream? [yes/no]
-- `max_prefix`: Your maximum number of prefixes that you plan to advertise
+- `max-prefix`: Your maximum number of prefixes that you plan to advertise
 - `prefixes`: List of your current prefixes that you want to advertise
 
-#### peers
+#### Upsteam and IXP
 
-Add each peer configuration as a list. Here are the possible parameters for each `peer`:
+Add each peer configuration as a list. Here are the possible parameters for each `upstream` and `ixp`:
 
-- `number`: Peer ASN
-- `downstream`: Does your peer have any downstream? [yes/no]
-- `as-set`: If the `downstream` is `yes`, does your peer have any downstream AS set?
-- `is_my_upstream`: Is it your upstream?
+- key: Peer ASN (example: AS214145)
+- `description`: ASN Name
+- `neighbors`: (optional) List of neighbor IP addresses
+- `update-source`: (optional) Source IP address of your BGP
+
+#### Peers and Downstream
+
+Add each peer configuration as a list. Here are the possible parameters for each `peers` and `downstream`:
+
+- key: Peer ASN (example: AS214145)
+- `description`: ASN Name
+- `as-set`: AS-SET name
+- `max-prefix`: Peer maximum number of prefixes that you want to receive
+- `neighbors`: (optional) List of neighbor IP addresses
+- `update-source`: (optional) Source IP address of your BGP
 
 #### Configuration Example
 
-```yaml
-config:
-  me:
-    number: 214145
-    as-set: "AS214145:AS-BASE"
-    downstream: no
-    max_prefix: 10
-    prefixes:
-      - "2001:db8::/48"
-      - "2001:db8::/44"
-  peers:
-    - number: 27500
-      as-set: "AS-ICANN"
-      downstream: yes
-      is_my_upstream: yes
-    - number: 2121
-      as-set: "AS-RIPENCC"
-      downstream: yes
-      is_my_upstream: no
-```
+Checkout `/usr/local/etc/lirctl/lirctl.conf.sample`.
 
 ### IPv6
 
@@ -136,6 +126,32 @@ Check the wiki section of Github for more information.
 - In helpers, we use `_get` for functions and `_list` for groups of functions.
 - We define IPv4-specific codes as `_v4_`, but we do not define specific function names for IPv6-specific codes.
 - We use `_ds_` in function names for those that have downstreams, and `_nods_` for those that don't have downstreams.
+
+#### Function Naming Precedence
+
+Here is our naming standard:
+
+```sh
+${name}_${ass}_${ds}_${version}_${direction}_${rev}_${helper}_${result}
+```
+
+- result:
+  - get: result of one function
+  - list: result of multiple functions
+  - check: result of verifications
+- helper: name of helper file of function
+  - cfg
+  - bgp
+  - pfl
+  - asp
+  - frr
+  - rtm
+- rev: (optional) is it reverse of another function?
+- direction: (optional) in or out?
+- version: (optional) is it ipv4 (defined as `_v4`) or not (empty)?
+- ds: (optional) does it have any downstream (defined as `_ds`) or not (defined as `_ds_rev`)?
+- ass: (optional) does it have any as-set (defined as `_ass`) or not (defined as `_ass_rev`)?
+- name: simply name of function
 
 ### Todo
 

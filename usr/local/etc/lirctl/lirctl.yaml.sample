@@ -8,10 +8,28 @@ config:
       - "2001:db8::/48"
       - "2001:db8::/44"
   ixp:
+    AS34307:
+      description: NL-IX
+      neighbors:
+        - "2001:db8:1000::1"
+        - "2001:db8:1000::2"
   upstream:
-    - number: 27500
-      as-set: "AS-ICANN"
-    - number: 2121
-      as-set: "AS-RIPENCC"
+    AS6939:
+      description: HE
+      neighbors:
+        - "2001:db8:2000::1"
   downstream:
+    AS2121:
+      description: RIPE
+      as-set: "AS-RIPENCC"
+      max-prefix: 20
+      neighbors:
+        - "2001:db8:3000::1"
+      source: "2001:db8::1"
   peers:
+    AS27500:
+      description: ICANN
+      as-set: "AS-ICANN"
+      max-prefix: 20
+      neighbors:
+        - "2001:db8:4000::1"

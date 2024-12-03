@@ -31,6 +31,11 @@ force_run_as_root() {
   fi
 }
 
+# Get AS$1 replace it with $1
+as_num_base_get() {
+  echo $1 | tr -d 'AS'
+}
+
 usage() {
   cat <<EOF
 lirctl(8) is an open-source utility for automating deployment and management of

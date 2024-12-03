@@ -25,32 +25,32 @@ cron_bogon()
 cron_update()
 {
     # Should be first due to value validation
-    myself_out_pfl_get $HAVE_DOWNSTREAM
-    echo 
+    myself_out_pfl_get
+    echo
 
     cron_bogon
 
-    get_asn_with_downstream_lists | while read peer
+    ass_asn_yml_get | while read peer
     do
         ds_in_pfl_get $peer
         echo
-        in_ds_asp_get $peer
+        ds_in_asp_get $peer
         echo
     done
     echo
         
-    get_asn_without_downstream_lists | while read peer
+    ass_rev_asn_yml_get | while read peer
     do
         nods_in_pfl_get $peer
         echo
-        in_nods_asp_get $peer
+        nods_in_asp_get $peer
         echo
     done
     echo
 
-    get_asn_lists | while read peer
+    asn_yml_get | while read peer
     do
-        in_rtm_get $peer "$(get_peer_upstream_bool $peer)"
+        in_rtm_get $peer
         echo
         out_rtm_get $peer
         echo
@@ -61,9 +61,5 @@ cron_update()
 cron_full()
 {
     cron_update
-    get_asn_lists | while read peer
-    do
-        bgp_neighbor_peergroup_v6_create $peer $MAX_PREFIX "$(get_peer_upstream_bool $peer)"
-        echo
-    done
+    neighbor_bgp_list
 }

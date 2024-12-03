@@ -1,36 +1,88 @@
 #!/bin/sh
 
-# Generate neighbor configuration for $1 based on being our upstream or not $2
-bgp_neighbor_peergroup_v6_create()
-{
-  if [ "$3" = "True" ]
-	then
-		UPSTREAM_ASN_LINE="ASP_ANY"
-		UPSTREAM_IPV6_LINE="PFL_ANY"
-	elif [ "$3" = "False" ]
-	then
-		UPSTREAM_ASN_LINE="IMPORT_ASN_FROM_AS$1"
-		UPSTREAM_IPV6_LINE="IMPORT_IPV6_FROM_AS$1"
-	else
-		echo "lirctl -> Error: Upstream values in peer $1 should be yes or no"
-		exit 1
-	fi
+# Generate neighbor configuration for specific AS number ($1), its description ($2),
+# its maximum incoming prefixes ($3), its as-set and prefix-lists,
+# and optionally its neighbors ($4), and update-source ($5)
+neighbor_ds_bgp_get() {
+  ASN="$(as_num_base_get $1)"
+  echo "router bgp $MY_ASN
+neighbor $1 peer-group
+neighbor $1 description \"---------- $2 ----------\"
+neighbor $1 remote-as $ASN
+neighbor $1 send-community both
+neighbor $1 capability dynamic"
 
-    echo "router bgp $MY_ASN
-neighbor AS$1 peer-group
-neighbor AS$1 remote-as $1
-neighbor AS$1 send-community both
-neighbor AS$1 capability dynamic
-address-family ipv6 unicast
-  neighbor AS$1 remove-private-AS
-  neighbor AS$1 soft-reconfiguration inbound
-  neighbor AS$1 route-map IMPORT_RTMV6_FROM_AS$1 in
-  neighbor AS$1 route-map EXPORT_RTMV6_TO_AS$1 out
-  neighbor AS$1 filter-list $UPSTREAM_ASN_LINE in
-  neighbor AS$1 prefix-list $UPSTREAM_IPV6_LINE in
-  neighbor AS$1 prefix-list EXPORT_IPV6_TO_AS$1 out
-  neighbor AS$1 maximum-prefix-out $2
-  neighbor AS$1 activate
+  if [ -n "$5" ];
+  then
+    echo "neighbor $1 update-source $5"
+  fi
+
+  for neighbor in $4
+  do
+    echo "neighbor $neighbor peer-group $1"
+  done
+
+  echo "address-family ipv6 unicast
+  neighbor $1 remove-private-AS
+  neighbor $1 soft-reconfiguration inbound
+  neighbor $1 route-map IMPORT_RTMV6_FROM_$1 in
+  neighbor $1 route-map EXPORT_RTMV6_TO_$1 out
+  neighbor $1 filter-list IMPORT_ASN_FROM_$1 in
+  neighbor $1 prefix-list IMPORT_IPV6_FROM_$1 in
+  neighbor $1 prefix-list EXPORT_IPV6_TO_$1 out
+  neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
+  neighbor $1 maximum-prefix $3
+  neighbor $1 activate
   exit
 exit"
+}
+
+# Generate neighbor configuration for specific AS number ($1), its description ($2),
+# and optionally its neighbors ($3), and update-source ($4)
+neighbor_ds_rev_bgp_get() {
+  ASN="$(as_num_base_get $1)"
+  echo "router bgp $MY_ASN
+neighbor $1 peer-group
+neighbor $1 description \"---------- $2 ----------\"
+neighbor $1 remote-as $ASN
+neighbor $1 send-community both
+neighbor $1 capability dynamic"
+
+  if [ -n "$4" ];
+  then
+    echo "neighbor $1 update-source $4"
+  fi
+
+  for neighbor in $3
+  do
+    echo "neighbor $neighbor peer-group $1"
+  done
+
+  echo "address-family ipv6 unicast
+  neighbor $1 remove-private-AS
+  neighbor $1 soft-reconfiguration inbound
+  neighbor $1 route-map IMPORT_RTMV6_FROM_$1 in
+  neighbor $1 route-map EXPORT_RTMV6_TO_$1 out
+  neighbor $1 prefix-list EXPORT_IPV6_TO_$1 out
+  neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
+  neighbor $1 activate
+  exit
+exit"
+}
+
+# Generate all of the peer configurations
+neighbor_bgp_list() {
+    ass_asn_yml_get | while read peer
+    do
+        neighbor_ds_bgp_get $peer "$(peer_description_yml_get $peer)" \
+        "$(peer_max_prefix_yml_get $peer)" "$(neighbors_yml_get $peer)"
+        echo
+    done
+
+    ass_rev_asn_yml_get | while read peer
+    do
+        neighbor_ds_rev_bgp_get $peer "$(peer_description_yml_get $peer)" \
+        "$(neighbors_yml_get $peer)" "$(update_source_yml_get $peer)"
+        echo
+    done
 }
