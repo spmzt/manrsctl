@@ -2,7 +2,7 @@ config:
   me:
     number: 214145
     as-set: "AS214145:AS-BASE"
-    max_prefix: 10
+    max-prefix: 10
     prefixes:
       - "2001:db8::/48"
       - "2001:db8::/44"
