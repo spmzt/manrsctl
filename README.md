@@ -59,10 +59,8 @@ You can set these parameter under `upstream`, `ixp`, `downstream`, `peers` of `c
 
 ##### Local Preferences by Community
 
-You can enable 4 default standard communities with an additional extended
-to least significant 3 digits of the community under `localpref` (bool):
-
-- `localpref`: Enable (true) or disable (false) the communities below:
+You have 4 default standard communities with an additional extended
+to least significant 3 digits of the community:
 
 ```sh
 bgp large-community-list standard CMS_PREFMOD_100 permit your_as:1:2100
@@ -74,9 +72,7 @@ bgp large-community-list expanded CME-PREFMOD_RANGE permit your_as:1:2...
 
 ##### Informational Communities
 
-You can enable 5 informational communities under `informational`:
-
-- `informational`: Enable (true) or disable (false) the communities below:
+You have 5 informational communities:
 
 ```sh
 bgp large-community-list standard CMS_LEARNT_UPSTREAM permit your_as:1:3000
