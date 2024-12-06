@@ -7,6 +7,23 @@ config:
     prefixes:
       - "2001:db8::/48"
       - "2001:db8::/44"
+  community:
+    blackhole: 1:100
+    no-export: 1:200
+    localpref: true
+    informational: true
+    downstream:
+      adv_only: 1:300
+      adv_no_export: 1:350
+    ixp:
+      adv_only: 1:400
+      adv_no_export: 1:450
+    upstream:
+      adv_only: 1:500
+      adv_no_export: 1:550
+    peers:
+      adv_only: 1:600
+      adv_no_export: 1:650
   ixp:
     AS34307:
       description: NL-IX
@@ -16,6 +33,12 @@ config:
   upstream:
     AS6939:
       description: HE
+      valid:
+        loc: 200
+        community: 2:501
+      notfound:
+        loc: 100
+        community: 2:511
       neighbors:
         - "2001:db8:2000::1"
   downstream:
@@ -25,7 +48,7 @@ config:
       max-prefix: 20
       neighbors:
         - "2001:db8:3000::1"
-      source: "2001:db8::1"
+      upd-src: "2001:db8::1"
   peers:
     AS27500:
       description: ICANN

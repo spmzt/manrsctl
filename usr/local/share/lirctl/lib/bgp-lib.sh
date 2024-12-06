@@ -21,14 +21,16 @@ bgp_filters() {
 
     # List of prefix-lists
     full_pfl_list
+
+    # List of Community Lists
+    full_cml_list
+
+    # List of route-maps
+    full_rtm_list
 }
 
 bgp_peers() {
-    # List of AS-Paths
-    full_asp_list
-
-    # List of prefix-lists
-    full_pfl_list
+    bgp_filters
 
     # Configuration of peers
     neighbor_bgp_list

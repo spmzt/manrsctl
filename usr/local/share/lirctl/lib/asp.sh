@@ -63,13 +63,13 @@ bgp as-path access-list ASP_MYSELF seq 99 deny .*"
 
 # Generate import as path list from $1 AS
 nods_in_asp_get() {
-  echo "no bgp as-path access-list IMPORT_ASN_FROM_$1"
-  echo "bgp as-path access-list IMPORT_ASN_FROM_$1 deny .*"
+  echo "no bgp as-path access-list ASP_IMPORT_FROM_$1"
+  echo "bgp as-path access-list ASP_IMPORT_FROM_$1 deny .*"
 }
 
 # Generate import as path list from $1 AS with $2 as-set
 ds_in_asp_get() {
-  bgpq3 -Dl IMPORT_ASN_FROM_$1 -f $(as_num_base_get $1) $2
+  bgpq3 -Dl ASP_IMPORT_FROM_$1 -f $(as_num_base_get $1) $2
 }
 
 bogon_asp_list() {

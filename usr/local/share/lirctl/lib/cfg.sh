@@ -109,25 +109,6 @@ syntax_yml_check() {
 				done
 				continue
 				;;
-			"localpref")
-				for localpref_keys in $(parse_yml keys config.localpref);
-				do
-					case $localpref_keys in
-						upstream)
-							empty_value_yml_check config.localpref.upstream
-							continue
-							;;
-						ixp)
-							empty_value_yml_check config.localpref.ixp
-							continue
-							;;
-						*)
-							echo $community_keys
-							syntax_yml_error
-					esac
-				done
-				continue
-				;;
 			"upstream")
 				empty_value_yml_check config.upstream
 				continue
@@ -201,9 +182,6 @@ peer_type_yml_get() {
 			"community")
 				continue
 				;;
-			"localpref")
-				continue
-				;;
 			*)
 				echo $peer_type
 				;;
@@ -216,23 +194,16 @@ ass_peer_type_yml_get() {
 	for peer_type in $(parse_yml keys config);
 	do
 		case $peer_type in
-			"me")
+			"peers")
+				echo $peer_type
 				continue
 				;;
-			"community")
-				continue
-				;;
-			"localpref")
-				continue
-				;;
-			"upstream")
-				continue
-				;;
-			"ixp")
+			"downstream")
+				echo $peer_type
 				continue
 				;;
 			*)
-				echo $peer_type
+				continue
 				;;
 		esac
 	done
@@ -243,23 +214,32 @@ ass_rev_peer_type_yml_get() {
 	for peer_type in $(parse_yml keys config);
 	do
 		case $peer_type in
-			"me")
+			"upstream")
+				echo $peer_type
 				continue
 				;;
-			"community")
-				continue
-				;;
-			"localpref")
-				continue
-				;;
-			"downstream")
-				continue
-				;;
-			"peers")
+			"ixp")
+				echo $peer_type
 				continue
 				;;
 			*)
-				echo $peer_type
+				continue
+				;;
+		esac
+	done
+}
+
+# List of current configured ASN filter by peer type ($1).
+dynamic_asn_yml_get() {
+	for peer_type in $(peer_type_yml_get)
+	do
+		case $peer_type in
+			"$1")
+				echo "$(parse_yml keys config.$peer_type)"
+				continue
+				;;
+			*)
+				continue
 				;;
 		esac
 	done
@@ -360,15 +340,82 @@ neighbors_yml_get() {
 	done
 }
 
-update_source_yml_get() {
+# Get update-source ip address from configuration file
+upd_src_yml_get() {
 	for peer_type in $(peer_type_yml_get)
 	do
-		if [ -n "$(parse_yml get-value config.$peer_type.$1.update-source 2> /dev/null)" ];
+		if [ -n "$(parse_yml get-value config.$peer_type.$1.upd-src 2> /dev/null)" ];
 		then
-			parse_yml get-value config.$peer_type.$1.update-source
+			parse_yml get-value config.$peer_type.$1.upd-src
 			return
 		fi
 	done
+}
+
+# Get local preference of RPKI valid routes of peer from configuration file
+localpref_valid_peer_yml_get() {
+	for peer_type in $(peer_type_yml_get)
+	do
+		if [ -n "$(parse_yml get-value config.$peer_type.$1.valid.loc 2> /dev/null)" ];
+		then
+			parse_yml get-value config.$peer_type.$1.valid.loc
+			return
+		fi
+	done
+}
+
+# Get local preference of RPKI not found routes of peer from configuration file
+localpref_notfound_peer_yml_get() {
+	for peer_type in $(peer_type_yml_get)
+	do
+		if [ -n "$(parse_yml get-value config.$peer_type.$1.notfound.loc 2> /dev/null)" ];
+		then
+			parse_yml get-value config.$peer_type.$1.notfound.loc
+			return
+		fi
+	done
+}
+
+# Get community tag of RPKI valid routes of peer from configuration file
+cml_valid_peer_yml_get() {
+	for peer_type in $(peer_type_yml_get)
+	do
+		if [ -n "$(parse_yml get-value config.$peer_type.$1.valid.community 2> /dev/null)" ];
+		then
+			parse_yml get-value config.$peer_type.$1.valid.community
+			return
+		fi
+	done
+}
+
+# Get community tag of RPKI not found routes of peer from configuration file
+cml_notfound_peer_yml_get() {
+	for peer_type in $(peer_type_yml_get)
+	do
+		if [ -n "$(parse_yml get-value config.$peer_type.$1.notfound.community 2> /dev/null)" ];
+		then
+			parse_yml get-value config.$peer_type.$1.notfound.community
+			return
+		fi
+	done
+}
+
+# Get community tag of advertise only of specific peer type ($1) from configuration file
+cml_peer_type_adv_only_yml_get() {
+	if [ -n "$(parse_yml get-value config.community.$1.advertise_only 2> /dev/null)" ];
+	then
+		parse_yml get-value config.community.$1.advertise_only
+		return
+	fi
+}
+
+# Get community tag of advertise only of specific peer type ($1) from configuration file
+cml_peer_type_no_export_yml_get() {
+	if [ -n "$(parse_yml get-value config.community.$1.adv_with_no_export 2> /dev/null)" ];
+	then
+		parse_yml get-value config.community.$1.adv_with_no_export
+		return
+	fi
 }
 
 # Load my configuration file
@@ -382,4 +429,6 @@ cfg_load() {
     export MY_MAX_PREFIX="$(my_max_prefix_get)"
     export PEER_LEN="$(num_peers_yml_get)"
 	export PEER_LEN0="$(expr $PEER_LEN - 1)"
+	export CML_BLACKHOLE="$(parse_yml get-value config.community.blackhole 2> /dev/null)"
+	export CML_NO_EXPORT="$(parse_yml get-value config.community.no-export 2> /dev/null)"
 }

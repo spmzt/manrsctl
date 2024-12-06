@@ -14,6 +14,7 @@ cfg_load
 . /usr/local/share/lirctl/lib/bgp.sh
 . /usr/local/share/lirctl/lib/asp.sh
 . /usr/local/share/lirctl/lib/pfl.sh
+. /usr/local/share/lirctl/lib/cml.sh
 
 # Libraries
 . /usr/local/share/lirctl/lib/ipv6-lib.sh

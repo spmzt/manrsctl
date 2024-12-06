@@ -43,6 +43,49 @@ Here are the `me` parameters:
 - `max-prefix`: Your maximum number of prefixes that you plan to advertise
 - `prefixes`: List of your current prefixes that you want to advertise
 
+#### Community
+
+Here are the `community` parameters:
+
+- `blackhole`: blackhole community
+- `no-export`: no-export community
+
+##### Communities of Upstream, IXP, Peers, and Downstream
+
+You can set these parameter under `upstream`, `ixp`, `downstream`, `peers` of `community`:
+
+- `adv_only`: Only advertise to specific group
+- `adv_no_export`: Advertise to group category with no-export
+
+##### Local Preferences by Community
+
+You can enable 4 default standard communities with an additional extended
+to least significant 3 digits of the community under `localpref` (bool):
+
+- `localpref`: Enable (true) or disable (false) the communities below:
+
+```sh
+bgp large-community-list standard CMS_PREFMOD_100 permit your_as:1:2100
+bgp large-community-list standard CMS_PREFMOD_200 permit your_as:1:2200
+bgp large-community-list standard CMS_PREFMOD_300 permit your_as:1:2300
+bgp large-community-list standard CMS_PREFMOD_400 permit your_as:1:2400
+bgp large-community-list expanded CME-PREFMOD_RANGE permit your_as:1:2...
+```
+
+##### Informational Communities
+
+You can enable 5 informational communities under `informational`:
+
+- `informational`: Enable (true) or disable (false) the communities below:
+
+```sh
+bgp large-community-list standard CMS_LEARNT_UPSTREAM permit your_as:1:3000
+bgp large-community-list standard CMS_LEARNT_DS permit your_as:1:3100
+bgp large-community-list standard CMS_LEARNT_PEER permit your_as:1:3200
+bgp large-community-list standard CMS_LEARNT_IXP permit your_as:1:3300
+bgp large-community-list standard CMS_OWN_PREFIX permit your_as:1:3400
+```
+
 #### Upsteam and IXP
 
 Add each peer configuration as a list. Here are the possible parameters for each `upstream` and `ixp`:
@@ -50,7 +93,7 @@ Add each peer configuration as a list. Here are the possible parameters for each
 - key: Peer ASN (example: AS214145)
 - `description`: ASN Name
 - `neighbors`: (optional) List of neighbor IP addresses
-- `update-source`: (optional) Source IP address of your BGP
+- `upd-src`: (optional) Source IP address of your BGP
 
 #### Peers and Downstream
 
@@ -61,7 +104,25 @@ Add each peer configuration as a list. Here are the possible parameters for each
 - `as-set`: AS-SET name
 - `max-prefix`: Peer maximum number of prefixes that you want to receive
 - `neighbors`: (optional) List of neighbor IP addresses
-- `update-source`: (optional) Source IP address of your BGP
+- `upd-src`: (optional) Source IP address of your BGP
+
+#### Communities and Local Preference
+
+For each peer configuration, optionally you can specify a local preference and a community tag for valid and notfound RPKIs.
+For example:
+
+```yaml
+config:
+  upstream:
+    AS6939:
+      description: HE
+      valid:
+        loc: 200
+        community: 2:501
+      notfound:
+        loc: 100
+        community: 2:511
+```
 
 #### Configuration Example
 
@@ -84,6 +145,8 @@ We use these suffixes:
 - `PFL` as prefix-lists
 - `RTM` as route-map
 - `ASP` as as-path
+- `CME` as Community List Extended
+- `CMS` as Community List Standard
 
 ### Communities
 
@@ -98,6 +161,8 @@ Communities values of 214145:1:X, with X, have actions:
 - `1:500` - advertise only to upstreams
 - `1:600` - set no_export when advertising to upstreams
 - `1:2X00` - set local_preference to X00
+
+**Note**: We are only using large communities to support 4-Byte ASN.
 
 ### Usages
 
@@ -123,9 +188,8 @@ Check the wiki section of Github for more information.
 - We refer to the `-lib.sh` files as libraries.
 - We refer to the non-library files in the `lib` directory as helpers.
 - We do not import helpers inside another helper.
-- In helpers, we use `_get` for functions and `_list` for groups of functions.
-- We define IPv4-specific codes as `_v4_`, but we do not define specific function names for IPv6-specific codes.
-- We use `_ds_` in function names for those that have downstreams, and `_nods_` for those that don't have downstreams.
+- We use `flt` as abbriviation for filter.
+- We use `ups` as abbriviation for upstream.
 
 #### Function Naming Precedence
 
@@ -140,12 +204,13 @@ ${name}_${ass}_${ds}_${version}_${direction}_${rev}_${helper}_${result}
   - list: result of multiple functions
   - check: result of verifications
 - helper: name of helper file of function
-  - cfg
-  - bgp
-  - pfl
-  - asp
-  - frr
-  - rtm
+  - `cfg`: Configuration File
+  - `bgp`: BGP
+  - `pfl`: Prefix-List
+  - `asp`: AS-Path
+  - `frr`: Frrouting
+  - `rtm`: Route-Map
+  - `cml`: Community Lists
 - rev: (optional) is it reverse of another function?
 - direction: (optional) in or out?
 - version: (optional) is it ipv4 (defined as `_v4`) or not (empty)?

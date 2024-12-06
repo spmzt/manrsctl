@@ -69,22 +69,22 @@ myself_out_pfl_get() {
 
 # Generate import prefix list from $1 AS with $2 as-set
 ds_in_pfl_get() {
-  bgpq3 -m 48 -A6l IMPORT_IPV6_FROM_$1 $2
+  bgpq3 -m 48 -A6l PFL_IMPORT_FROM_$1 $2
 }
 
 # Generate import prefix list from $1 AS without downstream
 nods_in_pfl_get() {
-  bgpq3 -m 48 -A6l IMPORT_IPV6_FROM_$1 $1
+  bgpq3 -m 48 -A6l PFL_IMPORT_FROM_$1 $1
 }
 
 # Generate export prefix list from my AS with downstream
 myself_ds_out_pfl_get() {
-  bgpq3 -m48 -A6l EXPORT_IPV6_FROM_AS$MY_ASN AS$MY_ASN
+  bgpq3 -m48 -A6l PFL_EXPORT_FROM_AS$MY_ASN AS$MY_ASN
 }
 
 # Generate import prefix list from my AS without downstream
 myself_nods_out_pfl_get() {
-  bgpq3 -m 48 -A6l IMPORT_IPV6_FROM_AS$MY_ASN AS$MY_ASN
+  bgpq3 -m 48 -A6l PFL_IMPORT_FROM_AS$MY_ASN AS$MY_ASN
 }
 
 bogon_pfl_list() {

@@ -25,11 +25,11 @@ neighbor $1 capability dynamic"
   echo "address-family ipv6 unicast
   neighbor $1 remove-private-AS
   neighbor $1 soft-reconfiguration inbound
-  neighbor $1 route-map IMPORT_RTMV6_FROM_$1 in
-  neighbor $1 route-map EXPORT_RTMV6_TO_$1 out
-  neighbor $1 filter-list IMPORT_ASN_FROM_$1 in
-  neighbor $1 prefix-list IMPORT_IPV6_FROM_$1 in
-  neighbor $1 prefix-list EXPORT_IPV6_TO_$1 out
+  neighbor $1 route-map RTM_IMPORT_FROM_$1 in
+  neighbor $1 route-map RTM_EXPORT_TO_$1 out
+  neighbor $1 filter-list ASP_IMPORT_FROM_$1 in
+  neighbor $1 prefix-list PFL_IMPORT_FROM_$1 in
+  neighbor $1 prefix-list PFL_EXPORT_TO_$1 out
   neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
   neighbor $1 maximum-prefix $3
   neighbor $1 activate
@@ -61,9 +61,9 @@ neighbor $1 capability dynamic"
   echo "address-family ipv6 unicast
   neighbor $1 remove-private-AS
   neighbor $1 soft-reconfiguration inbound
-  neighbor $1 route-map IMPORT_RTMV6_FROM_$1 in
-  neighbor $1 route-map EXPORT_RTMV6_TO_$1 out
-  neighbor $1 prefix-list EXPORT_IPV6_TO_$1 out
+  neighbor $1 route-map RTM_IMPORT_FROM_$1 in
+  neighbor $1 route-map RTM_EXPORT_TO_$1 out
+  neighbor $1 prefix-list PFL_EXPORT_TO_$1 out
   neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
   neighbor $1 activate
   exit
@@ -82,7 +82,7 @@ neighbor_bgp_list() {
     ass_rev_asn_yml_get | while read peer
     do
         neighbor_ds_rev_bgp_get $peer "$(peer_description_yml_get $peer)" \
-        "$(neighbors_yml_get $peer)" "$(update_source_yml_get $peer)"
+        "$(neighbors_yml_get $peer)" "$(upd_src_yml_get $peer)"
         echo
     done
 }
