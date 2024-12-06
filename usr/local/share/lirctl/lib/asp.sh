@@ -91,9 +91,28 @@ static_asp_list() {
     echo
 }
 
+dynamic_ass_asp_get() {
+    ass_asn_yml_get | while read peer
+    do
+        ds_in_asp_get $peer "$(ass_yml_get $peer)"
+        echo
+    done
+}
+
+dynamic_ass_rev_asp_get() {
+    ass_rev_asn_yml_get | while read peer
+    do
+        nods_in_asp_get $peer
+        echo
+    done
+}
+
 dynamic_asp_list() {
     myself_asp_get $MY_ASN
     echo
+
+    dynamic_ass_asp_get
+    #dynamic_ass_rev_asp_get
 }
 
 full_asp_list() {

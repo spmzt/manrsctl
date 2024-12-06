@@ -285,6 +285,18 @@ ass_rev_asn_yml_get() {
 	done
 }
 
+# Get ASS of specific ASN ($1)
+ass_yml_get() {
+	for peer_type in $(ass_peer_type_yml_get)
+	do
+		if [ -n "$(parse_yml get-value config.$peer_type.$1.as-set 2> /dev/null)" ];
+		then
+			echo "$(parse_yml get-value config.$peer_type.$1.as-set)"
+			break
+		fi
+	done
+}
+
 # List of my prefixes
 myself_prefixes_yml_get() {
 	parse_yml get-values config.me.prefixes

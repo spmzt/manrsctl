@@ -30,32 +30,9 @@ cron_update()
 
     cron_bogon
 
-    ass_asn_yml_get | while read peer
-    do
-        ds_in_pfl_get $peer
-        echo
-        ds_in_asp_get $peer
-        echo
-    done
-    echo
-        
-    ass_rev_asn_yml_get | while read peer
-    do
-        nods_in_pfl_get $peer
-        echo
-        nods_in_asp_get $peer
-        echo
-    done
-    echo
+    dynamic_ass_pfl_get
 
-    asn_yml_get | while read peer
-    do
-        in_rtm_get $peer
-        echo
-        out_rtm_get $peer
-        echo
-    done
-    echo
+    dynamic_ass_asp_get
 }
 
 cron_full()

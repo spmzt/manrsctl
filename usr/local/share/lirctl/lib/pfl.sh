@@ -109,10 +109,29 @@ static_pfl_list() {
     echo
 }
 
+dynamic_ass_pfl_get() {
+    ass_asn_yml_get | while read peer
+    do
+        ds_in_pfl_get $peer "$(ass_yml_get $peer)"
+        echo
+    done
+}
+
+dynamic_ass_rev_pfl_get() {
+    ass_rev_asn_yml_get | while read peer
+    do
+        nods_in_pfl_get $peer
+        echo
+    done
+}
+
 dynamic_pfl_list() {
     myself_out_pfl_get
     myself_ds_out_pfl_get
     echo
+
+    dynamic_ass_pfl_get
+    #dynamic_ass_rev_pfl_get
 }
 
 full_pfl_list() {
