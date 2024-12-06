@@ -9,8 +9,6 @@ config:
   community:
     blackhole: 1:100
     no-export: 1:200
-    localpref: true
-    informational: true
     downstream:
       adv_only: 1:300
       adv_no_export: 1:350
