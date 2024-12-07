@@ -643,24 +643,24 @@ route-map RTM_EXPORT_TO_$1 deny 99
 
 # Generate export route-map of your asn.
 my_out_rtm_get() {
-  echo "route-map RTM_EXPORT_FROM_$MYASN permit 1
+  echo "route-map RTM_EXPORT_FROM_$MY_ASN permit 1
  description Drop Invalid Prefixes
  call RTM_INVALID_DENY
  on-match next
 exit
 !
-route-map RTM_EXPORT_FROM_$MYASN permit 10
+route-map RTM_EXPORT_FROM_$MY_ASN permit 10
  description Export netwroks with specific BGP attributes
- match ipv6 address prefix-list PFL_EXPORT_IPV6_FROM_AS$MYASN"
+ match ipv6 address prefix-list PFL_EXPORT_IPV6_FROM_AS$MY_ASN"
 
  if [ -n "$CMS_OWN_PREFIX" ];
  then
-  echo " set large-community $MYASN:$CML_MY_PREFIX additive"
+  echo " set large-community $MY_ASN:$CML_MY_PREFIX additive"
  fi
 
  echo " exit
 !
-route-map RTM_EXPORT_FROM_$MYASN deny 99
+route-map RTM_EXPORT_FROM_$MY_ASN deny 99
  description Export netwroks with specific BGP attributes
  match ipv6 address prefix-list PFL_ANY
 exit"
