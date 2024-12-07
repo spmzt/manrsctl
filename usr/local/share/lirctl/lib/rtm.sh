@@ -682,8 +682,8 @@ cfg_in_rtm_get() {
   PEER_TYPE="$1"
   dynamic_asn_yml_get $PEER_TYPE | while read AS
   do
-    ${PEER_TYPE}_in_rtm_get $AS "$(cml_valid_peer_yml_get $AS)" "$(localpref_valid_peer_yml_get $AS)"\
-     "$(cml_notfound_peer_yml_get $AS)" "$(localpref_notfound_peer_yml_get $AS)"
+    ${PEER_TYPE}_in_rtm_get $AS "$(localpref_valid_peer_yml_get $AS)" "$(cml_valid_peer_yml_get $AS)"\
+     "$(localpref_notfound_peer_yml_get $AS)" "$(cml_notfound_peer_yml_get $AS)"
   done
 }
 
