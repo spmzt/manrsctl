@@ -74,28 +74,28 @@ ds_in_asp_get() {
 
 bogon_asp_list() {
     bogon_asp_get
-    echo
+    echo !
 
     bogon_rev_asp_get
-    echo
+    echo !
 }
 
 static_asp_list() {
     any_asp_get
-    echo
+    echo !
 
     bogon_asp_get
-    echo
+    echo !
 
     bogon_rev_asp_get
-    echo
+    echo !
 }
 
 dynamic_ass_asp_get() {
     ass_asn_yml_get | while read peer
     do
         ds_in_asp_get $peer "$(ass_yml_get $peer)"
-        echo
+        echo !
     done
 }
 
@@ -103,13 +103,13 @@ dynamic_ass_rev_asp_get() {
     ass_rev_asn_yml_get | while read peer
     do
         nods_in_asp_get $peer
-        echo
+        echo !
     done
 }
 
 dynamic_asp_list() {
     myself_asp_get $MY_ASN
-    echo
+    echo !
 
     dynamic_ass_asp_get
     #dynamic_ass_rev_asp_get

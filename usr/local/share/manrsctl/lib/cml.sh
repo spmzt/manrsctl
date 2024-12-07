@@ -81,9 +81,13 @@ bgp large-community-list standard CMS_LEARNT_IXP permit $MY_ASN:1:3300"
 
 static_cml_list() {
     prefmod_cml_get
+    echo !
     info_cml_get
+    echo !
     blackhole_cml_get
+    echo !
     no_export_cml_get
+    echo !
 }
 
 # Get advertise only community list configuration of the all peer types
@@ -113,7 +117,10 @@ dynamic_no_export_cml_list() {
 # Get community list configuration of the all peer types
 dynamic_cml_list() {
     dynamic_adv_only_cml_list
+    echo !
+
     dynamic_no_export_cml_list
+    echo !
 }
 
 full_cml_list() {

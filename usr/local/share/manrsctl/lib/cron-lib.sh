@@ -26,7 +26,7 @@ cron_update()
 {
     # Should be first due to value validation
     myself_out_pfl_get
-    echo
+    echo !
 
     cron_bogon
 

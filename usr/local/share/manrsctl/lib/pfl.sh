@@ -58,11 +58,11 @@ ip prefix-list PFL_V4_BOGON deny 240.0.0.0/4 le 32"
 }
 
 myself_out_pfl_get() {
-    echo "ipv6 prefix-list PFL_EXPORT_IPV6_FROM_AS$MY_ASN description my IPv6 prefixes that we want to advertise"
+    echo "ipv6 prefix-list PFL_EXPORT_FROM_AS$MY_ASN description my IPv6 prefixes that we want to advertise"
     seq_num=10
     myself_prefixes_yml_get | while read prefix
     do
-        echo "ipv6 prefix-list PFL_EXPORT_IPV6_FROM_AS$MY_ASN seq $seq_num permit $prefix"
+        echo "ipv6 prefix-list PFL_EXPORT_FROM_AS$MY_ASN seq $seq_num permit $prefix"
         seq_num="$(expr $seq_num + 10)"
     done
 }
@@ -89,31 +89,31 @@ myself_nods_out_pfl_get() {
 
 bogon_pfl_list() {
     bogon_pfl_get
-    echo
+    echo !
 
     bogon_v4_pfl_get
-    echo
+    echo !
 }
 
 static_pfl_list() {
     any_pfl_get
-    echo
+    echo !
 
     any_rev_pfl_get
-    echo
+    echo !
 
     any_v4_pfl_get
-    echo
+    echo !
 
     any_rev_v4_pfl_get
-    echo
+    echo !
 }
 
 dynamic_ass_pfl_get() {
     ass_asn_yml_get | while read peer
     do
         ds_in_pfl_get $peer "$(ass_yml_get $peer)"
-        echo
+        echo !
     done
 }
 
@@ -121,14 +121,16 @@ dynamic_ass_rev_pfl_get() {
     ass_rev_asn_yml_get | while read peer
     do
         nods_in_pfl_get $peer
-        echo
+        echo !
     done
 }
 
 dynamic_pfl_list() {
     myself_out_pfl_get
+    echo !
+
     myself_ds_out_pfl_get
-    echo
+    echo !
 
     dynamic_ass_pfl_get
     #dynamic_ass_rev_pfl_get

@@ -389,14 +389,24 @@ peer_type_yml_get() {
 	for peer_type in $(parse_yml keys config);
 	do
 		case $peer_type in
-			"me")
+			"upstream")
+				echo $peer_type
 				continue
 				;;
-			"community")
+			"downstream")
+				echo $peer_type
+				continue
+				;;
+			"ixp")
+				echo $peer_type
+				continue
+				;;
+			"peers")
+				echo $peer_type
 				continue
 				;;
 			*)
-				echo $peer_type
+				continue
 				;;
 		esac
 	done
@@ -448,7 +458,10 @@ ixp_peer_type_yml_get() {
 	do
 		case $peer_type in
 			"ixp")
-				echo $peer_type
+				for peer in $(parse_yml keys config.ixp);
+				do
+					echo $peer
+				done
 				continue
 				;;
 			*)
@@ -464,7 +477,10 @@ upstream_peer_type_yml_get() {
 	do
 		case $peer_type in
 			"upstream")
-				echo $peer_type
+				for peer in $(parse_yml keys config.upstream);
+				do
+					echo $peer
+				done
 				continue
 				;;
 			*)

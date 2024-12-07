@@ -21,8 +21,13 @@ deps:
 	@echo "Install python applications"
 	@pip install -r requirements.txt
 
+.PHONY: man
+man:
+	@if [ -f usr/local/share/man/man8/manrsctl.8 ]; then\
+		gzip -f usr/local/share/man/man8/manrsctl.8;\
+	fi
 .PHONY: install
-install:
+install: deps man
 	@echo "Installing manrsctl"
 	@echo
 	@cp -Rv usr /
@@ -38,7 +43,7 @@ install:
 	fi
 
 .PHONY: installonly
-installonly: deps
+installonly: deps man
 	@echo "Installing manrsctl"
 	@echo
 	@cp -Rv usr /

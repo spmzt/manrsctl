@@ -10,6 +10,7 @@ Available Commands:
     filters      Generates bogon filters, including as path lists, ipv6 prefix lists.
     peers [only] Generates peer configurations.
     network      Generates network advertisement configurations.
+    full         Full configuration of BGP.
 
 Use "manrsctl -v|--version" for version information.
 EOF
@@ -28,6 +29,7 @@ bgp_filters() {
 
     # RPKI
     servers_rpki_get
+    echo !
 
     # List of route-maps
     full_rtm_list
@@ -51,7 +53,14 @@ bgp_peers_only() {
 bgp_network() {
     # Route-map configuration of my asn prefixes
     my_out_rtm_get
+    echo !
 
     # Configuration of network commands
     network_bgp_get
+    echo !
+}
+
+bgp_full() {
+    bgp_network
+    bgp_peers
 }
