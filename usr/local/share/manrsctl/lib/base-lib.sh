@@ -48,6 +48,7 @@ Available Commands:
   bgp    prepare and setup BGP configurations.
   cron   prepare and updates BGP filters.
   ipv6   provide IPv6 utilities (e.g random host address).
+  rpki   provide rpki configurations.
 
 Use "manrsctl -v|--version" for version information.
 Use "manrsctl command -h|--help" for more information about a command.
