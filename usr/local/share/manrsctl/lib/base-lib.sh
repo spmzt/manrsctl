@@ -39,7 +39,7 @@ as_num_base_get() {
 usage() {
   cat <<EOF
 manrsctl(8) is an open-source utility for automating deployment and management of
-LIRs.
+MANRS Requirements.
 
 Usage:
   manrsctl command [args]
