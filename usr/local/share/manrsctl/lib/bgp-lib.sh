@@ -4,14 +4,14 @@
 bgp_usage() {
     cat << EOF
 Usage:
-  lirctl bgp COMMAND
+  manrsctl bgp COMMAND
 
 Available Commands:
     filters      Generates bogon filters, including as path lists, ipv6 prefix lists.
     peers [only] Generates peer configurations.
     network      Generates network advertisement configurations.
 
-Use "lirctl -v|--version" for version information.
+Use "manrsctl -v|--version" for version information.
 EOF
     exit 1
 }

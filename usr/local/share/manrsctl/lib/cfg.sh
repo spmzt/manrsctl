@@ -3,17 +3,17 @@
 # Find config file
 cfg_get() {
 	export LIRCTL_CONF;
-	if [ -f $HOME/.config/lirctl/lirctl.yaml ]
+	if [ -f $HOME/.config/manrsctl/manrsctl.yaml ]
 	then
-		export LIRCTL_CONF="$(realpath $HOME/.config/lirctl/lirctl.yaml)"
-	elif [ -f /usr/local/etc/lirctl/lirctl.yaml ]
+		export LIRCTL_CONF="$(realpath $HOME/.config/manrsctl/manrsctl.yaml)"
+	elif [ -f /usr/local/etc/manrsctl/manrsctl.yaml ]
 	then
-		export LIRCTL_CONF="$(realpath /usr/local/etc/lirctl/lirctl.yaml)"
-	elif [ -f /etc/lirctl/lirctl.yaml ]
+		export LIRCTL_CONF="$(realpath /usr/local/etc/manrsctl/manrsctl.yaml)"
+	elif [ -f /etc/manrsctl/manrsctl.yaml ]
 	then
-		export LIRCTL_CONF="$(realpath /etc/lirctl/lirctl.yaml)"
+		export LIRCTL_CONF="$(realpath /etc/manrsctl/manrsctl.yaml)"
 	else
-		print_error "(lirctl) Can't find configuration file."
+		print_error "(manrsctl) Can't find configuration file."
 		exit 1
 	fi
 }

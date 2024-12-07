@@ -4,14 +4,14 @@ cron_usage()
 {
     cat << EOF
 Usage:
-  lirctl cron COMMAND
+  manrsctl cron COMMAND
 
 Available Commands:
     update		only updates the filters, including as path lists, ipv6 prefix lists, route-maps.
     bogon       only updates the bogon filters, including as path lists, ipv6 prefix lists.
     full        generate full configuration (update + bgp configuration).
 
-Use "lirctl -v|--version" for version information.
+Use "manrsctl -v|--version" for version information.
 EOF
     exit 1
 }

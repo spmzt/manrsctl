@@ -1,9 +1,9 @@
 #!/bin/sh
 #
 # Version
-LIRCTL_VERSION="0.1.0"
+MANRSCTL_VERSION="0.1.0"
 
-. /usr/local/share/lirctl/common.sh
+. /usr/local/share/manrsctl/common.sh
 
 [ $# -lt 1 ] && usage
 
@@ -13,7 +13,7 @@ shift
 # Handle special-case commands first.
 case "${CMD}" in
 version | -v | --version)
-  echo "${LIRCTL_VERSION}"
+  echo "${MANRSCTL_VERSION}"
   exit 0
   ;;
 help | -h | --help)
@@ -21,7 +21,7 @@ help | -h | --help)
   ;;
 esac
 
-SCRIPTPATH="/usr/local/share/lirctl/${CMD}.sh"
+SCRIPTPATH="/usr/local/share/manrsctl/${CMD}.sh"
 if [ -f "${SCRIPTPATH}" ]; then
   : "${UMASK:=022}"
   umask "${UMASK}"

@@ -1,22 +1,22 @@
-# LIR Management
+# MANRS Management
 
 ## 📖 Documentation
 
 -----
 
-We do have a man page `lirctl(8)`. Please read the following manual.
+We do have a man page `manrsctl(8)`. Please read the following manual.
 
 ### Configuration File
 
-The `lirctl.yaml` configuration file can be in these directories and it loaded by this order:
+The `manrsctl.yaml` configuration file can be in these directories and it loaded by this order:
 
-- `$HOME/.config/lirctl/lirctl.yaml`
-- `/usr/local/etc/lirctl/lirctl.yaml`
-- `/etc/lirctl/lirctl.yaml`
+- `$HOME/.config/manrsctl/manrsctl.yaml`
+- `/usr/local/etc/manrsctl/manrsctl.yaml`
+- `/etc/manrsctl/manrsctl.yaml`
 
 ### Installation
 
-To install `lirctl(8)`:
+To install `manrsctl(8)`:
 
 ```sh
 sudo make install
@@ -151,7 +151,7 @@ config:
 
 #### Configuration Example
 
-Checkout `/usr/local/etc/lirctl/lirctl.conf.sample`.
+Checkout `/usr/local/etc/manrsctl/manrsctl.conf.sample`.
 
 ### IPv6
 
@@ -160,7 +160,7 @@ Checkout `/usr/local/etc/lirctl/lirctl.conf.sample`.
 To generate random host (/64) address:
 
 ```sh
-lirctl ipv6 rand
+manrsctl ipv6 rand
 ```
 
 ### Naming Standards
@@ -193,15 +193,15 @@ Communities values of 214145:1:X, with X, have actions:
 
 #### Updating Filters
 
-To update the as path lists, prefix lists, and the route-maps, use `lirctl cron update`.
+To update the as path lists, prefix lists, and the route-maps, use `manrsctl cron update`.
 
 #### Updating Bogon Filters
 
-To update the Bogon as-path lists, and prefix lists use `lirctl cron bogon`.
+To update the Bogon as-path lists, and prefix lists use `manrsctl cron bogon`.
 
 #### Full BGP Configuration
 
-To generate the full configuration (with bgp neighborships), use `lirctl cron full`.
+To generate the full configuration (with bgp neighborships), use `manrsctl cron full`.
 
 ## Contributions
 

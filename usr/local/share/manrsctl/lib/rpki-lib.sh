@@ -4,12 +4,12 @@ rpki_usage()
 {
     cat << EOF
 Usage:
-  lirctl rpki COMMAND
+  manrsctl rpki COMMAND
 
 Available Commands:
     servers		Configuration of your RPKI Servers.
 
-Use "lirctl -v|--version" for version information.
+Use "manrsctl -v|--version" for version information.
 EOF
     exit 1
 }

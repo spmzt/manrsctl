@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. /usr/local/share/lirctl/common.sh
+. /usr/local/share/manrsctl/common.sh
 
 case "$1" in
 help|-h|--help)
