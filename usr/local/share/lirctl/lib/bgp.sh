@@ -7,7 +7,7 @@ neighbor_ds_bgp_get() {
   ASN="$(as_num_base_get $1)"
   echo "router bgp $MY_ASN
 neighbor $1 peer-group
-neighbor $1 description \"---------- $2 ----------\"
+neighbor $1 description ---------- $2 ----------
 neighbor $1 remote-as $ASN
 neighbor $1 send-community both
 neighbor $1 capability dynamic"
@@ -29,7 +29,7 @@ neighbor $1 capability dynamic"
   neighbor $1 route-map RTM_EXPORT_TO_$1 out
   neighbor $1 filter-list ASP_IMPORT_FROM_$1 in
   neighbor $1 prefix-list PFL_IMPORT_FROM_$1 in
-  neighbor $1 prefix-list PFL_EXPORT_TO_$1 out
+  neighbor $1 prefix-list PFL_EXPORT_FROM_AS$MY_ASN out
   neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
   neighbor $1 maximum-prefix $3
   neighbor $1 activate
@@ -43,7 +43,7 @@ neighbor_ds_rev_bgp_get() {
   ASN="$(as_num_base_get $1)"
   echo "router bgp $MY_ASN
 neighbor $1 peer-group
-neighbor $1 description \"---------- $2 ----------\"
+neighbor $1 description ---------- $2 ----------
 neighbor $1 remote-as $ASN
 neighbor $1 send-community both
 neighbor $1 capability dynamic"
@@ -63,7 +63,7 @@ neighbor $1 capability dynamic"
   neighbor $1 soft-reconfiguration inbound
   neighbor $1 route-map RTM_IMPORT_FROM_$1 in
   neighbor $1 route-map RTM_EXPORT_TO_$1 out
-  neighbor $1 prefix-list PFL_EXPORT_TO_$1 out
+  neighbor $1 prefix-list PFL_EXPORT_FROM_AS$MY_ASN out
   neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
   neighbor $1 activate
   exit
