@@ -15,8 +15,10 @@ cfg_load
 . /usr/local/share/lirctl/lib/asp.sh
 . /usr/local/share/lirctl/lib/pfl.sh
 . /usr/local/share/lirctl/lib/cml.sh
+. /usr/local/share/lirctl/lib/rpki.sh
 
 # Libraries
 . /usr/local/share/lirctl/lib/ipv6-lib.sh
+. /usr/local/share/lirctl/lib/rpki-lib.sh
 . /usr/local/share/lirctl/lib/cron-lib.sh
 . /usr/local/share/lirctl/lib/bgp-lib.sh

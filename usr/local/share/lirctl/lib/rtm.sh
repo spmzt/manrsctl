@@ -504,9 +504,14 @@ route-map RTM_EXPORT_TO_$1 permit 5
  exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
- description Export netwroks with valid RPKI
- match large-community CMS_OWN_PREFIX
- match ipv6 address prefix-list EXPORT_IPV6_NETWORK
+ description Export netwroks with valid RPKI"
+
+ if [ -n "$CMS_OWN_PREFIX" ];
+ then
+  echo "match large-community CMS_OWN_PREFIX"
+ fi
+
+ echo " match ipv6 address prefix-list EXPORT_IPV6_NETWORK
  match rpki valid
  exit
 !
@@ -537,9 +542,14 @@ route-map RTM_EXPORT_TO_$1 permit 5
  exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
- description Export netwroks with valid RPKI
- match large-community CMS_OWN_PREFIX
- match ipv6 address prefix-list EXPORT_IPV6_NETWORK
+ description Export netwroks with valid RPKI"
+
+ if [ -n "$CMS_OWN_PREFIX" ];
+ then
+  echo "match large-community CMS_OWN_PREFIX"
+ fi
+
+ echo " match ipv6 address prefix-list EXPORT_IPV6_NETWORK
  match rpki valid
  exit
 !
@@ -570,9 +580,14 @@ route-map RTM_EXPORT_TO_$1 permit 5
  exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
- description Export netwroks with valid RPKI
- match large-community CMS_OWN_PREFIX
- match ipv6 address prefix-list EXPORT_IPV6_NETWORK
+ description Export netwroks with valid RPKI"
+
+ if [ -n "$CMS_OWN_PREFIX" ];
+ then
+  echo "match large-community CMS_OWN_PREFIX"
+ fi
+
+ echo " match ipv6 address prefix-list EXPORT_IPV6_NETWORK
  match rpki valid
  exit
 !
@@ -603,9 +618,14 @@ route-map RTM_EXPORT_TO_$1 permit 5
  exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
- description Export netwroks with valid RPKI
- match large-community CMS_OWN_PREFIX
- match ipv6 address prefix-list EXPORT_IPV6_NETWORK
+ description Export netwroks with valid RPKI"
+
+ if [ -n "$CMS_OWN_PREFIX" ];
+ then
+  echo "match large-community CMS_OWN_PREFIX"
+ fi
+
+ echo " match ipv6 address prefix-list EXPORT_IPV6_NETWORK
  match rpki valid
  exit
 !
@@ -619,6 +639,31 @@ route-map RTM_EXPORT_TO_$1 deny 99
  description Export netwroks with specific BGP attributes
  match ipv6 address prefix-list PFL_ANY
  exit"
+}
+
+# Generate export route-map of your asn.
+my_out_rtm_get() {
+  echo "route-map RTM_EXPORT_FROM_$MYASN permit 1
+ description Drop Invalid Prefixes
+ call RTM_INVALID_DENY
+ on-match next
+exit
+!
+route-map RTM_EXPORT_FROM_$MYASN permit 10
+ description Export netwroks with specific BGP attributes
+ match ipv6 address prefix-list PFL_EXPORT_IPV6_FROM_AS$MYASN"
+
+ if [ -n "$CMS_OWN_PREFIX" ];
+ then
+  echo " set large-community $MYASN:$CML_MY_PREFIX additive"
+ fi
+
+ echo " exit
+!
+route-map RTM_EXPORT_FROM_$MYASN deny 99
+ description Export netwroks with specific BGP attributes
+ match ipv6 address prefix-list PFL_ANY
+exit"
 }
 
 action_static_rtm_list() {
@@ -666,6 +711,7 @@ cml_in_static_rtm_list() {
 cml_static_rtm_list() {
   cml_out_static_rtm_list
   cml_in_static_rtm_list
+  my_out_rtm_get
 }
 
 static_rtm_list() {

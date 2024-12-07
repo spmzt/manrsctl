@@ -63,6 +63,10 @@ syntax_yml_check() {
 							empty_value_yml_check config.me.max-prefix
 							continue
 							;;
+						"bgp")
+							empty_value_yml_check config.me.bgp
+							continue
+							;;
 						"prefixes")
 							empty_value_yml_check config.me.prefixes
 							continue
@@ -70,7 +74,35 @@ syntax_yml_check() {
 						*)
 							echo $me_keys
 							syntax_yml_error
+							;;
 					esac
+				done
+				continue
+				;;
+			"rpki")
+				empty_value_yml_check config.rpki
+				RPKI_LEN=$(parse_yml get-length config.rpki)
+
+				if [ $RPKI_LEN -lt 1 ];
+				then
+					continue
+				fi
+
+				for i in $(seq 0 `expr $RPKI_LEN - 1`);
+				do
+					for rpki_keys in $(parse_yml keys config.rpki.$i);
+					do
+						case $rpki_keys in
+							"type"|"server"|"port"|"precedence")
+								empty_value_yml_check config.rpki.$i.$rpki_keys
+								continue
+								;;
+							*)
+								echo $i: $rpki_keys
+								syntax_yml_error
+								;;
+						esac
+					done
 				done
 				continue
 				;;
@@ -84,6 +116,10 @@ syntax_yml_check() {
 							;;
 						"no-export")
 							empty_value_yml_check config.community.no-export
+							continue
+							;;
+						"my-prefix")
+							empty_value_yml_check config.community.my-prefix
 							continue
 							;;
 						"upstream")
@@ -105,24 +141,201 @@ syntax_yml_check() {
 						*)
 							echo $community_keys
 							syntax_yml_error
+							;;
 					esac
 				done
 				continue
 				;;
 			"upstream")
-				empty_value_yml_check config.upstream
+				for ups_keys in $(parse_yml keys config.upstream);
+				do
+					empty_value_yml_check config.upstream.$ups_keys
+					for attr_ups_keys in $(parse_yml keys config.upstream.$ups_keys);
+					do
+						case $attr_ups_keys in
+							"description")
+								empty_value_yml_check config.upstream.$ups_keys.description
+								continue
+								;;
+							"neighbors")
+								empty_value_yml_check config.upstream.$ups_keys.neighbors
+								continue
+								;;
+							"upd-src")
+								empty_value_yml_check config.upstream.$ups_keys.upd-src
+								continue
+								;;
+							"valid")
+								empty_value_yml_check config.upstream.$ups_keys.valid
+								continue
+								;;
+							"notfound")
+								empty_value_yml_check config.upstream.$ups_keys.notfound
+								continue
+								;;
+							"disable-connected-check")
+								empty_value_yml_check config.upstream.$ups_keys.disable-connected-check
+								continue
+								;;
+							"ebgp-multihop")
+								empty_value_yml_check config.upstream.$ups_keys.ebgp-multihop
+								continue
+								;;
+							*)
+								echo $ups_keys $attr_ups_keys
+								syntax_yml_error
+								;;
+						esac
+					done
+				done
 				continue
 				;;
 			"downstream")
-				empty_value_yml_check config.downstream
+				for ds_keys in $(parse_yml keys config.downstream);
+				do
+					empty_value_yml_check config.downstream.$ds_keys
+					for attr_ds_keys in $(parse_yml keys config.downstream.$ds_keys);
+					do
+						case $attr_ds_keys in
+							"description")
+								empty_value_yml_check config.downstream.$ds_keys.description
+								continue
+								;;
+							"as-set")
+								empty_value_yml_check config.downstream.$ds_keys.as-set
+								continue
+								;;
+							"max-prefix")
+								empty_value_yml_check config.downstream.$ds_keys.max-prefix
+								continue
+								;;
+							"neighbors")
+								empty_value_yml_check config.downstream.$ds_keys.neighbors
+								continue
+								;;
+							"upd-src")
+								empty_value_yml_check config.downstream.$ds_keys.upd-src
+								continue
+								;;
+							"valid")
+								empty_value_yml_check config.downstream.$ds_keys.valid
+								continue
+								;;
+							"notfound")
+								empty_value_yml_check config.downstream.$ds_keys.notfound
+								continue
+								;;
+							"disable-connected-check")
+								empty_value_yml_check config.downstream.$ds_keys.disable-connected-check
+								continue
+								;;
+							"ebgp-multihop")
+								empty_value_yml_check config.downstream.$ds_keys.ebgp-multihop
+								continue
+								;;
+							"addpath-tx-all-paths")
+								empty_value_yml_check config.downstream.$ds_keys.addpath-tx-all-paths
+								continue
+								;;
+							*)
+								echo $ds_keys $attr_ds_keys
+								syntax_yml_error
+								;;
+						esac
+					done
+				done
 				continue
 				;;
 			"ixp")
-				empty_value_yml_check config.ixp
+				for ixp_keys in $(parse_yml keys config.ixp);
+				do
+					empty_value_yml_check config.ixp.$ixp_keys
+					for attr_ixp_keys in $(parse_yml keys config.ixp.$ixp_keys);
+					do
+						case $attr_ixp_keys in
+							"description")
+								empty_value_yml_check config.ixp.$ixp_keys.$attr_ixp_keys
+								continue
+								;;
+							"neighbors")
+								empty_value_yml_check config.ixp.$ixp_keys.$attr_ixp_keys
+								continue
+								;;
+							"upd-src")
+								empty_value_yml_check config.ixp.$ixp_keys.$attr_ixp_keys
+								continue
+								;;
+							"valid")
+								empty_value_yml_check config.ixp.$ixp_keys.$attr_ixp_keys
+								continue
+								;;
+							"notfound")
+								empty_value_yml_check config.ixp.$ixp_keys.$attr_ixp_keys
+								continue
+								;;
+							*)
+								echo $ixp_keys $attr_ixp_keys
+								syntax_yml_error
+								;;
+						esac
+					done
+				done
 				continue
 				;;
 			"peers")
-				empty_value_yml_check config.peers
+				for peers_keys in $(parse_yml keys config.peers);
+				do
+					empty_value_yml_check config.peers.$peers_keys
+					for attr_peers_keys in $(parse_yml keys config.peers.$peers_keys);
+					do
+						case $attr_peers_keys in
+							"description")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"as-set")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"max-prefix")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"neighbors")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"upd-src")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"valid")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"notfound")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"disable-connected-check")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"ebgp-multihop")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"addpath-tx-all-paths")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							*)
+								echo $peers_keys $attr_peers_keys
+								syntax_yml_error
+								;;
+						esac
+					done
+				done
 				continue
 				;;
 			*)
@@ -219,6 +432,38 @@ ass_rev_peer_type_yml_get() {
 				continue
 				;;
 			"ixp")
+				echo $peer_type
+				continue
+				;;
+			*)
+				continue
+				;;
+		esac
+	done
+}
+
+# List of current configured peers of IXP.
+ixp_peer_type_yml_get() {
+	for peer_type in $(parse_yml keys config);
+	do
+		case $peer_type in
+			"ixp")
+				echo $peer_type
+				continue
+				;;
+			*)
+				continue
+				;;
+		esac
+	done
+}
+
+# List of current configured peers of IXP.
+upstream_peer_type_yml_get() {
+	for peer_type in $(parse_yml keys config);
+	do
+		case $peer_type in
+			"upstream")
 				echo $peer_type
 				continue
 				;;
@@ -443,4 +688,6 @@ cfg_load() {
 	export PEER_LEN0="$(expr $PEER_LEN - 1)"
 	export CML_BLACKHOLE="$(parse_yml get-value config.community.blackhole 2> /dev/null)"
 	export CML_NO_EXPORT="$(parse_yml get-value config.community.no-export 2> /dev/null)"
+	export CML_MY_PREFIX="$(parse_yml get-value config.community.my_prefix 2> /dev/null)"
+	export BGP_RID="$(parse_yml get-value config.me.bgp.router-id 2> /dev/null)"
 }

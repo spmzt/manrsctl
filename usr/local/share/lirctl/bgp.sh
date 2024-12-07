@@ -19,6 +19,9 @@ then
     else
         bgp_peers
     fi
+elif [ "$1" = "network" ]
+then
+        bgp_network
 else
     bgp_usage
 fi

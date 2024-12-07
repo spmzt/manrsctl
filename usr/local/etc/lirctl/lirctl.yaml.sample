@@ -3,12 +3,25 @@ config:
     number: 214145
     as-set: "AS214145:AS-BASE"
     max-prefix: 10
+      router-id: 10.10.10.10
+      default-ipv4: false
+      default-ipv6: false
+      enforce-first-as: false
+      suppress-fib-pending: true
+      graceful-restart: true
+      import-check: false
     prefixes:
       - "2001:db8::/48"
       - "2001:db8::/44"
+  rpki:
+    10:
+      type: tcp
+      server: fe80::1
+      port: 3323
   community:
     blackhole: 1:100
     no-export: 1:200
+    my-prefix: 1:3400
     downstream:
       adv_only: 1:300
       adv_no_export: 1:350

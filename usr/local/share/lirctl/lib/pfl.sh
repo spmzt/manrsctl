@@ -58,11 +58,11 @@ ip prefix-list PFL_V4_BOGON deny 240.0.0.0/4 le 32"
 }
 
 myself_out_pfl_get() {
-    echo "ipv6 prefix-list EXPORT_IPV6_NETWORK description my IPv6 prefixes that we want to advertise"
+    echo "ipv6 prefix-list PFL_EXPORT_IPV6_FROM_AS$MYASN description my IPv6 prefixes that we want to advertise"
     seq_num=10
     myself_prefixes_yml_get | while read prefix
     do
-        echo "ipv6 prefix-list EXPORT_IPV6_NETWORK seq $seq_num permit $prefix"
+        echo "ipv6 prefix-list PFL_EXPORT_IPV6_FROM_AS$MYASN seq $seq_num permit $prefix"
         seq_num="$(expr $seq_num + 10)"
     done
 }

@@ -67,14 +67,16 @@ bgp large-community-list expanded CME_PREFMOD_RANGE permit $MY_ASN:1:2..."
 # 3100 - learned from customer (downstream)
 # 3200 - learned from peer
 # 3300 - learned from IXP
-# 3400 - Our own prefixes
 #
 info_cml_get() {
     echo "bgp large-community-list standard CMS_LEARNT_UPSTREAM permit $MY_ASN:1:3000
 bgp large-community-list standard CMS_LEARNT_DS permit $MY_ASN:1:3100
 bgp large-community-list standard CMS_LEARNT_PEER permit $MY_ASN:1:3200
-bgp large-community-list standard CMS_LEARNT_IXP permit $MY_ASN:1:3300
-bgp large-community-list standard CMS_OWN_PREFIX permit $MY_ASN:1:3400"
+bgp large-community-list standard CMS_LEARNT_IXP permit $MY_ASN:1:3300"
+    if [ -n "$CML_MY_PREFIX" ];
+    then
+        echo "bgp large-community-list standard CMS_OWN_PREFIX permit $MY_ASN:$CML_MY_PREFIX"
+    fi
 }
 
 static_cml_list() {

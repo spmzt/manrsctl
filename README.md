@@ -43,12 +43,33 @@ Here are the `me` parameters:
 - `max-prefix`: Your maximum number of prefixes that you plan to advertise
 - `prefixes`: List of your current prefixes that you want to advertise
 
+##### BGP (optional)
+
+You can set these parameter under `bgp` key parameter of `me`:
+
+- `router-id`: BGP router-id
+- `default-ipv4`: can be true or false (e.g: `no bgp default ipv4-unicast`)
+- `default-ipv6`: can be true or false (e.g: `no bgp default ipv6-unicast`)
+- `enforce-first-as`: can be true or false (e.g: `no bgp enforce-first-as`)
+- `suppress-fib-pending`: can be true or false (e.g: `no bgp suppress-fib-pending`)
+- `graceful-restart`: can be true or false (e.g: `no bgp graceful-restart`)
+- `import-check`: can be true or false (e.g: `no bgp network import-check`)
+
+#### RPKI
+
+Here are the `rpki` parameters:
+
+- `type`: for now, it only can be `tcp`
+- `server`: IP address of the rpki server
+- `port`: port number
+
 #### Community
 
 Here are the `community` parameters:
 
 - `blackhole`: blackhole community
 - `no-export`: no-export community
+- `my-prefix`: (optional) Community tag of your own prefixes
 
 ##### Communities of Upstream, IXP, Peers, and Downstream
 
@@ -79,7 +100,6 @@ bgp large-community-list standard CMS_LEARNT_UPSTREAM permit your_as:1:3000
 bgp large-community-list standard CMS_LEARNT_DS permit your_as:1:3100
 bgp large-community-list standard CMS_LEARNT_PEER permit your_as:1:3200
 bgp large-community-list standard CMS_LEARNT_IXP permit your_as:1:3300
-bgp large-community-list standard CMS_OWN_PREFIX permit your_as:1:3400
 ```
 
 #### Upsteam and IXP
@@ -88,8 +108,6 @@ Add each peer configuration as a list. Here are the possible parameters for each
 
 - key: Peer ASN (example: AS214145)
 - `description`: ASN Name
-- `neighbors`: (optional) List of neighbor IP addresses
-- `upd-src`: (optional) Source IP address of your BGP
 
 #### Peers and Downstream
 
@@ -97,12 +115,22 @@ Add each peer configuration as a list. Here are the possible parameters for each
 
 - key: Peer ASN (example: AS214145)
 - `description`: ASN Name
-- `as-set`: AS-SET name
+- `as-set`: AS-SET name (You can set an empty AS-SET if you want like: AS214145:AS-EMPTY)
 - `max-prefix`: Peer maximum number of prefixes that you want to receive
+- `addpath_tx_all_paths`: (optional) can be true or false.
+
+#### Shared Value Between upstream, ixp, downstream, and peers key
+
+For each peer configuration, optionally you can specify these parameters below:
+
 - `neighbors`: (optional) List of neighbor IP addresses
 - `upd-src`: (optional) Source IP address of your BGP
+- `disable-connected-check`: (optional) can be true or false (e.g: `neighbor ASx disable-connected-check`).  (except for IXP peers)
+- `ebgp-multihop`: (optional) TTL value of BGP Packets (except for IXP peers)
 
-#### Communities and Local Preference
+Note: `disable-connected-check` and `ebgp-multihop` will not apply to IXP peers
+
+##### Communities and Local Preference
 
 For each peer configuration, optionally you can specify a local preference and a community tag for valid and notfound RPKIs.
 For example:
