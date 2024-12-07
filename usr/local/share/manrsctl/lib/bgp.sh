@@ -124,7 +124,7 @@ addpath_tx_all_bgp_get() {
 }
 
 configure_bgp_get() {
-  echo "router bgp 214145"
+  echo "router bgp $MY_ASN"
   
   if [ -n "$BGP_RID" ];
   then
@@ -146,7 +146,7 @@ network_bgp_get() {
   echo "router bgp $MY_ASN"
   myself_prefixes_yml_get | while read prefix
   do
-      echo "network $prefix route-map RTM_EXPORT_FROM_$MYASN"
+      echo "network $prefix route-map RTM_EXPORT_FROM_$MY_ASN"
   done
   echo "exit"
 }
