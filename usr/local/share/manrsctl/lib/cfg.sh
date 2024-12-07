@@ -2,27 +2,27 @@
 
 # Find config file
 cfg_get() {
-	export LIRCTL_CONF;
+	export MANRSCTL_CONF;
 	if [ -f $HOME/.config/manrsctl/manrsctl.yaml ]
 	then
-		export LIRCTL_CONF="$(realpath $HOME/.config/manrsctl/manrsctl.yaml)"
+		export MANRSCTL_CONF="$(realpath $HOME/.config/manrsctl/manrsctl.yaml)"
 	elif [ -f /usr/local/etc/manrsctl/manrsctl.yaml ]
 	then
-		export LIRCTL_CONF="$(realpath /usr/local/etc/manrsctl/manrsctl.yaml)"
+		export MANRSCTL_CONF="$(realpath /usr/local/etc/manrsctl/manrsctl.yaml)"
 	elif [ -f /etc/manrsctl/manrsctl.yaml ]
 	then
-		export LIRCTL_CONF="$(realpath /etc/manrsctl/manrsctl.yaml)"
+		export MANRSCTL_CONF="$(realpath /etc/manrsctl/manrsctl.yaml)"
 	else
 		print_error "(manrsctl) Can't find configuration file."
 		exit 1
 	fi
 }
 
-# Run to set its LIRCTL_CONF variables
+# Run to set its MANRSCTL_CONF variables
 cfg_get
 
 parse_yml() {
-	python3 -m shyaml $@ < $LIRCTL_CONF
+	python3 -m shyaml $@ < $MANRSCTL_CONF
 }
 
 syntax_yml_error() {
@@ -349,19 +349,19 @@ syntax_yml_check() {
 # What is my AS number?
 my_asn_get()
 {
-	parse_yml get-value config.me.number < $LIRCTL_CONF
+	parse_yml get-value config.me.number < $MANRSCTL_CONF
 }
 
 # What is my as-set?
 my_ass_get()
 {
-	parse_yml get-value config.me.as-set < $LIRCTL_CONF
+	parse_yml get-value config.me.as-set < $MANRSCTL_CONF
 }
 
 # What is my maximum number of outgoing prefixes
 my_max_prefix_get()
 {
-	parse_yml get-value config.me.max-prefix < $LIRCTL_CONF
+	parse_yml get-value config.me.max-prefix < $MANRSCTL_CONF
 }
 
 # List of current configured ixp peers.
@@ -495,7 +495,7 @@ num_peers_yml_get() {
 	local sum;
 	for peer_type in $(peer_type_yml_get)
 	do
-		sum=$(expr $sum + "$(parse_yml get-length config.$peer_type < $LIRCTL_CONF)")
+		sum=$(expr $sum + "$(parse_yml get-length config.$peer_type < $MANRSCTL_CONF)")
 	done
     if [ "$sum" = 0 ]
 	then
