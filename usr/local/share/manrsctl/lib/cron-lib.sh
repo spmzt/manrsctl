@@ -28,7 +28,6 @@ cron_edrop() {
 
 cron_update()
 {
-    echo "configure terminal"
     # Should be first due to value validation
     myself_out_pfl_get
     echo !
@@ -40,5 +39,4 @@ cron_update()
     dynamic_ass_pfl_get
 
     dynamic_ass_asp_get
-    echo "exit"
 }
