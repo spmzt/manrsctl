@@ -508,10 +508,10 @@ dynamic_asn_yml_get() {
 
 # Total number of peers.
 num_peers_yml_get() {
-	local sum;
+	local sum=0;
 	for peer_type in $(peer_type_yml_get)
 	do
-		sum=$(expr $sum + "$(parse_yml get-length config.$peer_type < $MANRSCTL_CONF)")
+		sum=$(expr $sum + `parse_yml get-length config.$peer_type`)
 	done
     if [ "$sum" = 0 ]
 	then
