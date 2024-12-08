@@ -15,7 +15,7 @@ deps:
 	@if [ -e /etc/debian_version ]; then\
 		DEBIAN_FRONTEND=noninteractive apt install -y net-tools git python3-pip;\
 	elif [ "${OS}" = "FreeBSD" ]; then\
-		pkg install -y git-lite python3 py311-pip bgpq3;\
+		pkg install -y git-lite python3 py311-pip bgpq3 jq;\
 	fi
 	@echo
 	@echo "Install python applications"

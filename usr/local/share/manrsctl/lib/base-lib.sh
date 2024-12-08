@@ -15,9 +15,6 @@ CYAN=$(tput setaf 6)
 WHITE=$(tput setaf 7)
 BRIGHT=$(tput bold)
 NORMAL=$(tput sgr0)
-BLINK=$(tput blink)
-REVERSE=$(tput smso)
-UNDERLINE=$(tput smul)
 
 to_lower() {
   echo $1 | tr '[:upper:]' '[:lower:]'
