@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . /usr/local/share/manrsctl/common.sh
+. /usr/local/share/manrsctl/lib/bgp-lib.sh
 
 case "$1" in
     help|-h|--help)

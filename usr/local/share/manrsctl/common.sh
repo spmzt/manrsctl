@@ -16,9 +16,3 @@ cfg_load
 . /usr/local/share/manrsctl/lib/pfl.sh
 . /usr/local/share/manrsctl/lib/cml.sh
 . /usr/local/share/manrsctl/lib/rpki.sh
-
-# Libraries
-. /usr/local/share/manrsctl/lib/ipv6-lib.sh
-. /usr/local/share/manrsctl/lib/rpki-lib.sh
-. /usr/local/share/manrsctl/lib/cron-lib.sh
-. /usr/local/share/manrsctl/lib/bgp-lib.sh
