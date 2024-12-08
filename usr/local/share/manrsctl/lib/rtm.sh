@@ -25,7 +25,7 @@ route-map RTM_INVALID_DENY deny 4
 !
 route-map RTM_INVALID_DENY deny 5
   description Drop Edrop AS Path
-  match as-path ASP_EDROP
+  match as-path ASP_REV_EDROP
   exit
 !
 route-map RTM_INVALID_DENY permit 99

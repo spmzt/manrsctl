@@ -3,7 +3,7 @@
 # Version
 MANRSCTL_VERSION="0.1.0"
 
-. /usr/local/share/manrsctl/common.sh
+. /usr/local/share/manrsctl/lib/base-lib.sh
 
 [ $# -lt 1 ] && usage
 
@@ -20,21 +20,6 @@ help | -h | --help)
   usage
   ;;
 esac
-
-# Find config file
-if [ -f $HOME/.config/manrsctl/manrsctl.yaml ]
-then
-  export MANRSCTL_CONF="$(realpath $HOME/.config/manrsctl/manrsctl.yaml)"
-elif [ -f /usr/local/etc/manrsctl/manrsctl.yaml ]
-then
-  export MANRSCTL_CONF="$(realpath /usr/local/etc/manrsctl/manrsctl.yaml)"
-elif [ -f /etc/manrsctl/manrsctl.yaml ]
-then
-  export MANRSCTL_CONF="$(realpath /etc/manrsctl/manrsctl.yaml)"
-else
-  print_error "(manrsctl) Can't find configuration file."
-  exit 1
-fi
 
 SCRIPTPATH="/usr/local/share/manrsctl/${CMD}.sh"
 if [ -f "${SCRIPTPATH}" ]; then

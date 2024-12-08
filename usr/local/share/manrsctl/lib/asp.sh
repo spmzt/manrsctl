@@ -73,9 +73,8 @@ ds_in_asp_get() {
 }
 
 bogon_asp_list() {
-    bogon_asp_get
-    echo !
-
+    # bogon_asp_get
+    # echo !
     bogon_rev_asp_get
     echo !
 }
@@ -111,10 +110,10 @@ edrop_asp_get() {
   export i=5
   edrop_jq_get | while read asn
   do
-    echo "bgp as-path access-list ASP_EDROP seq $i deny $asn"
+    echo "bgp as-path access-list ASP_REV_EDROP seq $i permit $asn"
     i=$( expr $i + 5 )
   done
-  echo "bgp as-path access-list ASP_EDROP seq $i permit .*"
+  echo "bgp as-path access-list ASP_REV_EDROP seq $i deny .*"
   unset i
 }
 

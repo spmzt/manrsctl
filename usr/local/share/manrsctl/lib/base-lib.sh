@@ -15,20 +15,17 @@ CYAN=$(tput setaf 6)
 WHITE=$(tput setaf 7)
 BRIGHT=$(tput bold)
 NORMAL=$(tput sgr0)
+NC='\033[0m' # No Color
 
 to_lower() {
   echo $1 | tr '[:upper:]' '[:lower:]'
 }
 
 print_error() {
-  local RED='\033[0;31m'
-  local NC='\033[0m' # No Color
   printf "${RED}ERROR:\t$1${NC}\n"
 }
 
 print_bgp() {
-  local RED='\033[0;31m'
-  local NC='\033[0m' # No Color
   printf "${GREEN}$1${NC}\n"
 }
 

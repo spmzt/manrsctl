@@ -1,8 +1,13 @@
 #!/bin/sh
 #
-# Import libraries
-# Base library should be first to call
+# Import libraries (Call base-lib first)
 . /usr/local/share/manrsctl/lib/base-lib.sh
+
+# Find the configuration file
+# You need to find and load manrs configuration before import other libs
+. /usr/local/share/manrsctl/lib/cnf.sh
+# Run to set its MANRSCTL_CONF variables
+cfg_get
 
 # Load the configuration file
 . /usr/local/share/manrsctl/lib/cfg.sh
