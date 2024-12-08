@@ -149,6 +149,47 @@ config:
         community: 2:511
 ```
 
+#### Route-map and Community relationships
+
+For `IXP`:
+
+Import: `RTM_IMPORT_FROM_ASx`:
+
+- 1. permit call `RTM_INVALID_DENY`
+  - 1. deny if match rpki invalid
+  - 2. deny if match `PFL_BOGON`
+  - 3. deny if match `PFL_V4_BOGON`
+  - 4. deny if match `ASP_REV_BOGON`
+  - 99. permit
+- 5. permit call `RTM_IXP_IN`
+  - 10. permit call `RTM_CML_IN`
+    - 10. permit if match `CMS_BLACKHOLE` then call `RTM_BLACKHOLE`
+    - 20. permit if match `CMS_NO_EXPORT` then call `RTM_NO_EXPORT`
+    - 30. permit if match `CME_PREFMOD_RANGE` then call `RTM_PREFMOD`
+    - 40. permit
+  - 20. permit set large-community `214145:1:3300 additive`
+- 10. permit if match rpki valid AND `ASP_BOGON` then set local preference x.
+- 20. permit if match rpki notfound AND `ASP_BOGON` then set local preference y.
+- 99. deny if match `PFL_ANY`
+
+Export: `RTM_EXPORT_TO_ASx`:
+
+- 1. permit call `RTM_INVALID_DENY`
+  - 1. deny if match rpki invalid
+  - 2. deny if match `PFL_BOGON`
+  - 3. deny if match `PFL_V4_BOGON`
+  - 4. deny if match `ASP_REV_BOGON`
+  - 99. permit
+- 5. permit call `RTM_CML_FLT_TO_IXP`
+  - 10. deny `CMS_UPS_ONLY`
+  - 20. deny `CMS_DS_ONLY`
+  - 30. deny `CMS_PEERS_ONLY`
+  - 40. permit if match `CMS_IXP_NO_EXPORT` then call `RTM_NO_EXPORT`
+  - 99. permit
+- 10. permit if match rpki valid AND `PFL_EXPORT_FROM_ASy`.
+- 20. permit if match rpki valid AND `CMS_LEARNT_DS`.
+- 99. deny if match `PFL_ANY`
+
 #### Configuration Example
 
 Checkout `/usr/local/etc/manrsctl/manrsctl.conf.sample`.
