@@ -47,7 +47,6 @@ installonly: man
 	@echo "Installing manrsctl"
 	@echo
 	@cp -R usr /
-	@echo
 	@echo "This method is for testing / development."
 
 .PHONY: debug
