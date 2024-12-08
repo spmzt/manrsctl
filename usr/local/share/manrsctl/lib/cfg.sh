@@ -328,6 +328,7 @@ syntax_yml_check() {
 # What is my AS number?
 my_asn_get() {
 	parse_yml get-value config.me.number
+}
 
 # What is my as-set?
 my_ass_get() {
