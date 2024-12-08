@@ -96,12 +96,10 @@ bgp large-community-list expanded CME-PREFMOD_RANGE permit your_as:1:2...
 
 You have 5 informational communities:
 
-```sh
-bgp large-community-list standard CMS_LEARNT_UPSTREAM permit your_as:1:3000
-bgp large-community-list standard CMS_LEARNT_DS permit your_as:1:3100
-bgp large-community-list standard CMS_LEARNT_PEER permit your_as:1:3200
-bgp large-community-list standard CMS_LEARNT_IXP permit your_as:1:3300
-```
+- `3000`: learned from upstream (CMS_LEARNT_UPSTREAM)
+- `3100`: learned from downstream (CMS_LEARNT_DS)
+- `3200`: learned from peer (CMS_LEARNT_PEER)
+- `3300`: learned from IXP (CMS_LEARNT_IXP)
 
 #### Upsteam and IXP
 
