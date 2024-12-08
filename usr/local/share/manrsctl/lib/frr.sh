@@ -12,7 +12,8 @@ vtysh_frr_exec() {
 	service_frr_check
 	$1 > $file
 	vtysh -C -f $file || exit 1
-	vty -f $file
+	vtysh -f $file
+	echo Done!
 }
 
 get_prefix_lists_frr()
