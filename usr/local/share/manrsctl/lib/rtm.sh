@@ -23,6 +23,11 @@ route-map RTM_INVALID_DENY deny 4
   match as-path ASP_REV_BOGON
   exit
 !
+route-map RTM_INVALID_DENY deny 5
+  description Drop Edrop AS Path
+  match as-path ASP_EDROP
+  exit
+!
 route-map RTM_INVALID_DENY permit 99
   description call by other route-maps, permit anything
   exit"
@@ -281,8 +286,7 @@ route-map RTM_IMPORT_FROM_$1 permit 10
   description Import any valid RPKI from $1
   match rpki valid
   match ipv6 address prefix-list PFL_IMPORT_FROM_$1
-  match as-path ASP_IMPORT_FROM_$1
-  match as-path ASP_BOGON"
+  match as-path ASP_IMPORT_FROM_$1"
 
   if [ -n "$2" ];
   then
@@ -300,8 +304,7 @@ route-map RTM_IMPORT_FROM_$1 permit 20
   description Import any prefix that not found in RPKI db from $1 with lower pref
   match rpki notfound
   match ipv6 address prefix-list PFL_IMPORT_FROM_$1
-  match as-path ASP_IMPORT_FROM_$1
-  match as-path ASP_BOGON"
+  match as-path ASP_IMPORT_FROM_$1"
 
   if [ -n "$4" ];
   then
@@ -341,8 +344,7 @@ route-map RTM_IMPORT_FROM_$1 permit 10
   description Import any valid RPKI from $1
   match rpki valid
   match ipv6 address prefix-list PFL_IMPORT_FROM_$1
-  match as-path ASP_IMPORT_FROM_$1
-  match as-path ASP_BOGON"
+  match as-path ASP_IMPORT_FROM_$1"
 
   if [ -n "$2" ];
   then
@@ -360,8 +362,7 @@ route-map RTM_IMPORT_FROM_$1 permit 20
   description Import any prefix that not found in RPKI db from $1 with lower pref
   match rpki notfound
   match ipv6 address prefix-list PFL_IMPORT_FROM_$1
-  match as-path ASP_IMPORT_FROM_$1
-  match as-path ASP_BOGON"
+  match as-path ASP_IMPORT_FROM_$1"
 
   if [ -n "$4" ];
   then
@@ -399,8 +400,7 @@ route-map RTM_IMPORT_FROM_$1 permit 5
 !
 route-map RTM_IMPORT_FROM_$1 permit 10
   description Import any valid RPKI from $1
-  match rpki valid
-  match as-path ASP_BOGON"
+  match rpki valid"
 
   if [ -n "$2" ];
   then
@@ -416,8 +416,7 @@ route-map RTM_IMPORT_FROM_$1 permit 10
 !
 route-map RTM_IMPORT_FROM_$1 permit 20
   description Import any prefix that not found in RPKI db from $1 with lower pref
-  match rpki notfound
-  match as-path ASP_BOGON"
+  match rpki notfound"
 
   if [ -n "$4" ];
   then
@@ -455,8 +454,7 @@ route-map RTM_IMPORT_FROM_$1 permit 5
 !
 route-map RTM_IMPORT_FROM_$1 permit 10
   description Import any valid RPKI from $1
-  match rpki valid
-  match as-path ASP_BOGON"
+  match rpki valid"
 
   if [ -n "$2" ];
   then
@@ -472,8 +470,7 @@ route-map RTM_IMPORT_FROM_$1 permit 10
 !
 route-map RTM_IMPORT_FROM_$1 permit 20
   description Import any prefix that not found in RPKI db from $1 with lower pref
-  match rpki notfound
-  match as-path ASP_BOGON"
+  match rpki notfound"
 
   if [ -n "$4" ];
   then

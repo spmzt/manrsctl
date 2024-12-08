@@ -158,6 +158,7 @@ Import: `RTM_IMPORT_FROM_ASx`:
   - 2. deny if match `PFL_BOGON`
   - 3. deny if match `PFL_V4_BOGON`
   - 4. deny if match `ASP_REV_BOGON`
+  - 5. deny if match `ASP_REV_EDROP`
   - 99. permit
 - 5. permit call `RTM_IXP_IN`
   - 10. permit call `RTM_CML_IN`
@@ -166,8 +167,8 @@ Import: `RTM_IMPORT_FROM_ASx`:
     - 30. permit if match `CME_PREFMOD_RANGE` then call `RTM_PREFMOD`
     - 40. permit
   - 20. permit set large-community `214145:1:3300 additive`
-- 10. permit if match rpki valid AND `ASP_BOGON` then set local preference x.
-- 20. permit if match rpki notfound AND `ASP_BOGON` then set local preference y.
+- 10. permit if match rpki valid then optionally set local preference and community.
+- 20. permit if match rpki notfound then optionally set local preference and community.
 - 99. deny if match `PFL_ANY`
 
 Export: `RTM_EXPORT_TO_ASx`:

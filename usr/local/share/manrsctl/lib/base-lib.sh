@@ -58,7 +58,7 @@ fetch_edrop() {
   local url="https://www.spamhaus.org/drop/asndrop.json"
   if [ "$OSKERNEL" = "FreeBSD" ];
   then
-    fetch $url
+    fetch -o - $url
   elif [ "$OSKERNEL" = "Linux" ];
   then
     curl -q --no-progress-meter $url
