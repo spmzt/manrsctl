@@ -20,10 +20,6 @@ case "$1" in
         cron_edrop
         return
         ;;
-    full)
-        cron_full
-        return
-        ;;
     *)
         cron_usage
         ;;

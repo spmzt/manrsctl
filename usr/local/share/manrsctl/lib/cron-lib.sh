@@ -10,7 +10,6 @@ Available Commands:
     update		only updates the filters, including as path lists, ipv6 prefix lists, route-maps.
     bogon       only updates the bogon filters, including as path lists, ipv6 prefix lists.
     edrop       only updates the edrop as path lists.
-    full        generate full configuration (update + bgp configuration).
 
 Use "manrsctl -v|--version" for version information.
 EOF
@@ -40,10 +39,4 @@ cron_update()
     dynamic_ass_pfl_get
 
     dynamic_ass_asp_get
-}
-
-cron_full()
-{
-    cron_update
-    neighbor_bgp_list
 }
