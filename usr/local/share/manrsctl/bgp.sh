@@ -9,24 +9,47 @@ case "$1" in
         return
         ;;
     filters)
-        bgp_filters
+        if [ "$2" = "exec" ];
+        then
+            vtysh_frr_exec bgp_filters
+        else
+            bgp_filters
+        fi
         return
         ;;
     peers)
         if [ "$2" = "only" ];
         then
-            bgp_peers_only
+            if [ "$3" = "exec" ];
+            then
+                vtysh_frr_exec bgp_peers_only
+            else
+                bgp_peers_only
+            fi
+        elif [ "$2" = "exec" ];
+        then
+            vtysh_frr_exec bgp_peers
         else
             bgp_peers
         fi
         return
         ;;
     network)
-        bgp_network
+        if [ "$2" = "exec" ];
+        then
+            vtysh_frr_exec bgp_network
+        else
+            bgp_network
+        fi
         return
         ;;
     full)
-        bgp_full
+        if [ "$2" = "exec" ];
+        then
+            vtysh_frr_exec bgp_full
+        else
+            bgp_full
+        fi
         return
         ;;
     *)
