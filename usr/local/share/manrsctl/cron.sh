@@ -3,20 +3,27 @@
 . /usr/local/share/manrsctl/common.sh
 
 case "$1" in
-help|-h|--help)
-    cron_usage
-    ;;
+    help|-h|--help)
+        cron_usage
+        return
+        ;;
+    update)
+        cron_update
+        return
+        ;;
+    bogon)
+        cron_bogon
+        return
+        ;;
+    edrop)
+        cron_edrop
+        return
+        ;;
+    full)
+        cron_full
+        return
+        ;;
+    *)
+        cron_usage
+        ;;
 esac
-
-if [ "$1" = "update" ]
-then
-    cron_update
-elif [ "$1" = "bogon" ]
-then
-	cron_bogon
-elif [ "$1" = "full" ]
-then
-	cron_full
-else
-    cron_usage
-fi

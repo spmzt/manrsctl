@@ -54,6 +54,23 @@ force_run_as_root() {
   fi
 }
 
+fetch_edrop() {
+  local url="https://www.spamhaus.org/drop/asndrop.json"
+  if [ "$OSKERNEL" = "FreeBSD" ];
+  then
+    fetch $url
+  elif [ "$OSKERNEL" = "Linux" ];
+  then
+    curl -q --no-progress-meter $url
+  else
+    curl -q --no-progress-meter $url
+  fi
+}
+
+edrop_jq_get() {
+  fetch_edrop | jq .asn | grep -E '^([1-9]){1}([0-9]){0,9}$'
+}
+
 # Get AS$1 replace it with $1
 as_num_base_get() {
   echo $1 | tr -d 'AS'

@@ -107,12 +107,26 @@ dynamic_ass_rev_asp_get() {
     done
 }
 
+edrop_asp_get() {
+  export i=5
+  edrop_jq_get | while read asn
+  do
+    echo "bgp as-path access-list ASP_EDROP seq $i deny $asn"
+    i=$( expr $i + 5 )
+  done
+  echo "bgp as-path access-list ASP_EDROP seq $i permit .*"
+  unset i
+}
+
 dynamic_asp_list() {
     myself_asp_get $MY_ASN
     echo !
 
     dynamic_ass_asp_get
     #dynamic_ass_rev_asp_get
+
+    edrop_asp_get
+    echo !
 }
 
 full_asp_list() {
