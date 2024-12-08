@@ -69,7 +69,7 @@ nods_in_asp_get() {
 
 # Generate import as path list from $1 AS with $2 as-set
 ds_in_asp_get() {
-  bgpq3 -Dl ASP_IMPORT_FROM_$1 -f $(as_num_base_get $1) $2
+  bgpq3 -3wl ASP_IMPORT_FROM_$1 -f $(as_num_base_get $1) $2 | sed 's/ip as-path/bgp as-path/g'
 }
 
 bogon_asp_list() {
