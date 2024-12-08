@@ -43,10 +43,10 @@ install: deps man
 	fi
 
 .PHONY: installonly
-installonly: deps man
+installonly: man
 	@echo "Installing manrsctl"
 	@echo
-	@cp -Rv usr /
+	@cp -R usr /
 	@echo
 	@echo "This method is for testing / development."
 
