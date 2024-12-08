@@ -10,8 +10,11 @@ service_frr_check() {
 vtysh_frr_exec() {
 	local file="/tmp/vtysh.conf"
 	service_frr_check
+	echo Write configurations to $file...
 	$1 > $file
+	echo Syntax validations...
 	vtysh -C -f $file || exit 1
+	echo Applying configurations...
 	vtysh -f $file
 	echo Done!
 }
