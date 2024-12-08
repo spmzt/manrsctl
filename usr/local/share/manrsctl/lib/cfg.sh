@@ -347,21 +347,17 @@ syntax_yml_check() {
 }
 
 # What is my AS number?
-my_asn_get()
-{
-	parse_yml get-value config.me.number < $MANRSCTL_CONF
-}
+my_asn_get() {
+	parse_yml get-value config.me.number
 
 # What is my as-set?
-my_ass_get()
-{
-	parse_yml get-value config.me.as-set < $MANRSCTL_CONF
+my_ass_get() {
+	parse_yml get-value config.me.as-set
 }
 
 # What is my maximum number of outgoing prefixes
-my_max_prefix_get()
-{
-	parse_yml get-value config.me.max-prefix < $MANRSCTL_CONF
+my_max_prefix_get() {
+	parse_yml get-value config.me.max-prefix
 }
 
 # List of current configured ixp peers.
@@ -522,8 +518,7 @@ num_peers_yml_get() {
 }
 
 # List of all ASNs in our peering configurations
-asn_yml_get()
-{
+asn_yml_get() {
 	for peer_type in $(peer_type_yml_get)
 	do
 		echo $(parse_yml keys config.$peer_type)
