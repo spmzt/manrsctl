@@ -9,7 +9,12 @@ case "$1" in
         return
         ;;
     update)
-        cron_update
+        if [ "$2" = "exec"];
+        then
+            vtysh_frr_exec cron_update
+        else
+            cron_update
+        fi
         return
         ;;
     bogon)
