@@ -9,7 +9,7 @@ case "$1" in
         return
         ;;
     update)
-        if [ "$2" = "exec"];
+        if [ "$2" = "exec" ];
         then
             vtysh_frr_exec cron_update
         else
