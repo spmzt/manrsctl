@@ -14,7 +14,7 @@ config:
       - "2001:db8::/48"
       - "2001:db8::/44"
   rpki:
-    10:
+    - preference: 10
       type: tcp
       server: fe80::1
       port: 3323
