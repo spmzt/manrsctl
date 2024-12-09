@@ -518,7 +518,6 @@ exit
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to Downstream
  match large-community CMS_LEARNT_DS
- match rpki valid
 exit
 !
 route-map RTM_EXPORT_TO_$1 deny 99
@@ -555,7 +554,6 @@ exit
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to IXP
  match large-community CMS_LEARNT_DS
- match rpki valid
 exit
 !
 route-map RTM_EXPORT_TO_$1 deny 99
@@ -592,7 +590,6 @@ exit
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to peers
  match large-community CMS_LEARNT_DS
- match rpki valid
 exit
 !
 route-map RTM_EXPORT_TO_$1 deny 99
@@ -629,7 +626,6 @@ exit
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to upstreams
  match large-community CMS_LEARNT_DS
- match rpki valid
 exit
 !
 route-map RTM_EXPORT_TO_$1 deny 99
