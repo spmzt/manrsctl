@@ -139,10 +139,13 @@ configure_bgp_get() {
 }
 
 network_bgp_get() {
+  echo "  address-family ipv6 unicast"
+
   myself_prefixes_yml_get | while read prefix
   do
       echo "  network $prefix route-map RTM_EXPORT_FROM_AS$MY_ASN"
   done
+  echo "  exit"
 }
 
 # Generate neighbor configuration for specific AS number ($1), its description ($2),
