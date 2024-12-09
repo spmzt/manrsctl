@@ -513,7 +513,6 @@ route-map RTM_EXPORT_TO_$1 permit 10
  fi
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
- match rpki valid
 exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
@@ -551,7 +550,6 @@ route-map RTM_EXPORT_TO_$1 permit 10
  fi
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
- match rpki valid
 exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
@@ -589,7 +587,6 @@ route-map RTM_EXPORT_TO_$1 permit 10
  fi
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
- match rpki valid
 exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
@@ -627,7 +624,6 @@ route-map RTM_EXPORT_TO_$1 permit 10
  fi
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
- match rpki valid
 exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
