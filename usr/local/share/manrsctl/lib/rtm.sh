@@ -652,7 +652,8 @@ my_out_rtm_get() {
 !
 route-map RTM_EXPORT_FROM_AS$MY_ASN permit 10
   description Export netwroks with specific BGP attributes
-  match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN"
+  match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
+  match rpki valid"
 
  if [ -n "$CMS_OWN_PREFIX" ];
  then
