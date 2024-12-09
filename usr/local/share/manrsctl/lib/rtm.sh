@@ -509,7 +509,7 @@ route-map RTM_EXPORT_TO_$1 permit 10
 
  if [ -n "$CML_MY_PREFIX" ];
  then
-  echo " match large-community CML_MY_PREFIX"
+  echo " match large-community CMS_OWN_PREFIX"
  fi
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
@@ -547,7 +547,7 @@ route-map RTM_EXPORT_TO_$1 permit 10
 
  if [ -n "$CML_MY_PREFIX" ];
  then
-  echo " match large-community CML_MY_PREFIX"
+  echo " match large-community CMS_OWN_PREFIX"
  fi
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
@@ -585,7 +585,7 @@ route-map RTM_EXPORT_TO_$1 permit 10
 
  if [ -n "$CML_MY_PREFIX" ];
  then
-  echo " match large-community CML_MY_PREFIX"
+  echo " match large-community CMS_OWN_PREFIX"
  fi
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
@@ -623,7 +623,7 @@ route-map RTM_EXPORT_TO_$1 permit 10
 
  if [ -n "$CML_MY_PREFIX" ];
  then
-  echo " match large-community CML_MY_PREFIX"
+  echo " match large-community CMS_OWN_PREFIX"
  fi
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
