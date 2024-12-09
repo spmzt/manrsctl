@@ -679,6 +679,6 @@ cfg_load() {
 	export PEER_LEN0="$(expr $PEER_LEN - 1)"
 	export CML_BLACKHOLE="$(parse_yml get-value config.community.blackhole 2> /dev/null)"
 	export CML_NO_EXPORT="$(parse_yml get-value config.community.no-export 2> /dev/null)"
-	export CML_MY_PREFIX="$(parse_yml get-value config.community.my_prefix 2> /dev/null)"
+	export CML_MY_PREFIX="$(parse_yml get-value config.community.my-prefix 2> /dev/null)"
 	export BGP_RID="$(parse_yml get-value config.me.bgp.router-id 2> /dev/null)"
 }
