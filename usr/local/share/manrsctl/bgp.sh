@@ -35,7 +35,15 @@ case "$1" in
         return
         ;;
     network)
-        if [ "$2" = "exec" ];
+        if [ "$2" = "only" ];
+        then
+            if [ "$3" = "exec" ];
+            then
+                vtysh_frr_exec bgp_network_only
+            else
+                bgp_network_only
+            fi
+        elif [ "$2" = "exec" ];
         then
             vtysh_frr_exec bgp_network
         else

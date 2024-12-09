@@ -143,9 +143,9 @@ network_bgp_get() {
 
   myself_prefixes_yml_get | while read prefix
   do
-      echo "  network $prefix route-map RTM_EXPORT_FROM_AS$MY_ASN"
+      echo "    network $prefix route-map RTM_EXPORT_FROM_AS$MY_ASN"
   done
-  echo "  exit"
+  echo "    exit"
 }
 
 # Generate neighbor configuration for specific AS number ($1), its description ($2),

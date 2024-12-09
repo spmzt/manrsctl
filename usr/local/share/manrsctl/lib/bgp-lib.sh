@@ -56,6 +56,11 @@ bgp_network() {
     network_bgp_list
 }
 
+bgp_network_only() {
+    # Configuration of network commands
+    network_bgp_list
+}
+
 bgp_full() {
     bgp_filters
     full_bgp_list
