@@ -262,21 +262,21 @@ neighbor_bgp_get() {
     do
         neighbor_ds_bgp_get $peer "$(peer_description_yml_get $peer)" \
         "$(peer_max_prefix_yml_get $peer)" "$(neighbors_yml_get $peer)"
-        echo !
+        echo ' !'
     done
 
     upstream_peer_type_yml_get | while read peer
     do
         neighbor_ds_rev_bgp_get $peer "$(peer_description_yml_get $peer)" \
         "$(neighbors_yml_get $peer)" "$(upd_src_yml_get $peer)"
-        echo !
+        echo ' !'
     done
 
     ixp_peer_type_yml_get | while read peer
     do
         neighbor_ixp_bgp_get $peer "$(peer_description_yml_get $peer)" \
         "$(neighbors_yml_get $peer)" "$(upd_src_yml_get $peer)"
-        echo !
+        echo ' !'
     done
 }
 
