@@ -11,7 +11,7 @@ servers_rpki_get() {
     do
         echo "  rpki cache $(parse_yml get-value config.rpki.$i.type) \
 $(parse_yml get-value config.rpki.$i.server) $(parse_yml get-value config.rpki.$i.port) \
-precedence $(parse_yml get-value config.rpki.$i.precedence)"
+preference $(parse_yml get-value config.rpki.$i.preference)"
     done
     echo "  exit"
 }

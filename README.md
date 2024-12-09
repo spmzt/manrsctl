@@ -59,7 +59,7 @@ You can set these parameter under `bgp` key parameter of `me`:
 
 Here are the `rpki` parameters, pass them as list:
 
-- `precedence`: priority of server
+- `preference`: priority of server
 - `type`: for now, it only can be `tcp`
 - `server`: IP address of the rpki server
 - `port`: port number

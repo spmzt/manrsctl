@@ -72,7 +72,7 @@ syntax_yml_check() {
 					for rpki_keys in $(parse_yml keys config.rpki.$i);
 					do
 						case $rpki_keys in
-							"type"|"server"|"port"|"precedence")
+							"type"|"server"|"port"|"preference")
 								empty_value_yml_check config.rpki.$i.$rpki_keys
 								continue
 								;;
