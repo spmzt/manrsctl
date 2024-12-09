@@ -38,9 +38,6 @@ bgp_filters() {
 bgp_peers() {
     bgp_filters
 
-    # Configuration of BGP
-    configure_bgp_get
-
     # Configuration of peers
     neighbor_bgp_list
 }
@@ -56,11 +53,10 @@ bgp_network() {
     echo !
 
     # Configuration of network commands
-    network_bgp_get
-    echo !
+    network_bgp_list
 }
 
 bgp_full() {
-    bgp_network
-    bgp_peers
+    bgp_filters
+    full_bgp_list
 }

@@ -124,8 +124,6 @@ addpath_tx_all_bgp_get() {
 }
 
 configure_bgp_get() {
-  print_bgp "router bgp $MY_ASN"
-  
   if [ -n "$BGP_RID" ];
   then
     print_bgp "  bgp router-id $BGP_RID"
@@ -138,17 +136,13 @@ configure_bgp_get() {
   graceful_restart_as_bgp_get
   net_import_check_as_bgp_get
 
-  print_bgp "  exit"
-  print_bgp !
 }
 
 network_bgp_get() {
-  print_bgp "router bgp $MY_ASN"
   myself_prefixes_yml_get | while read prefix
   do
       print_bgp "  network $prefix route-map RTM_EXPORT_FROM_AS$MY_ASN"
   done
-  print_bgp "  exit"
 }
 
 # Generate neighbor configuration for specific AS number ($1), its description ($2),
@@ -156,8 +150,7 @@ network_bgp_get() {
 # and optionally its neighbors ($4), and update-source ($5)
 neighbor_ds_bgp_get() {
   ASN="$(as_num_base_get $1)"
-  print_bgp "router bgp $MY_ASN
-  neighbor $1 peer-group
+  print_bgp "  neighbor $1 peer-group
   neighbor $1 description ---------- $2 ----------
   neighbor $1 remote-as $ASN
   neighbor $1 send-community both
@@ -189,16 +182,14 @@ neighbor_ds_bgp_get() {
     neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
     neighbor $1 maximum-prefix $3
     neighbor $1 activate
-    exit
-  exit"
+    exit"
 }
 
 # Generate neighbor configuration for specific AS number ($1), its description ($2),
 # and optionally its neighbors ($3), and update-source ($4)
 neighbor_ds_rev_bgp_get() {
   ASN="$(as_num_base_get $1)"
-  print_bgp "router bgp $MY_ASN
-  neighbor $1 peer-group
+  print_bgp "  neighbor $1 peer-group
   neighbor $1 description ---------- $2 ----------
   neighbor $1 remote-as $ASN
   neighbor $1 send-community both
@@ -226,16 +217,14 @@ neighbor_ds_rev_bgp_get() {
     neighbor $1 prefix-list PFL_EXPORT_FROM_AS$MY_ASN out
     neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
     neighbor $1 activate
-    exit
-  exit"
+    exit"
 }
 
 # Generate neighbor configuration for specific AS number ($1), its description ($2),
 # and optionally its neighbors ($3), and update-source ($4)
 neighbor_ixp_bgp_get() {
   ASN="$(as_num_base_get $1)"
-  print_bgp "router bgp $MY_ASN
-  neighbor $1 peer-group
+  print_bgp "  neighbor $1 peer-group
   neighbor $1 description ---------- IXP: $2 ----------
   neighbor $1 remote-as $ASN
   neighbor $1 send-community both
@@ -261,12 +250,11 @@ neighbor_ixp_bgp_get() {
     neighbor $1 prefix-list PFL_EXPORT_FROM_AS$MY_ASN out
     neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
     neighbor $1 activate
-    exit
-  exit"
+    exit"
 }
 
 # Generate all of the peer configurations
-neighbor_bgp_list() {
+neighbor_bgp_get() {
     ass_asn_yml_get | while read peer
     do
         neighbor_ds_bgp_get $peer "$(peer_description_yml_get $peer)" \
@@ -287,4 +275,35 @@ neighbor_bgp_list() {
         "$(neighbors_yml_get $peer)" "$(upd_src_yml_get $peer)"
         print_bgp !
     done
+}
+
+neighbor_bgp_list() {
+  print_bgp "router bgp $MY_ASN"
+
+    # Configuration of peers
+    neighbor_bgp_get
+
+    print_bgp "  exit"
+}
+
+network_bgp_list() {
+    print_bgp "router bgp $MY_ASN"
+
+    # Configuration of network advertisements
+    network_bgp_get
+    print_bgp "  exit"
+}
+
+# Generate all of the peer configurations
+full_bgp_list() {
+    print_bgp "router bgp $MY_ASN"
+    # Configuration of BGP
+    configure_bgp_get
+
+    # Configuration of network advertisements
+    network_bgp_get
+
+    # Configuration of peers
+    neighbor_bgp_get
+    print_bgp "  exit"
 }
