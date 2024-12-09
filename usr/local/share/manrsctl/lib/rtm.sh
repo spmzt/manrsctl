@@ -662,6 +662,12 @@ route-map RTM_EXPORT_FROM_AS$MY_ASN permit 10
 
  echo "  exit
 !
+route-map RTM_EXPORT_FROM_AS$MY_ASN permit 20
+  description Export our netwroks with not working rpki as separate rule
+  match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
+  match rpki notfound
+  exit
+!
 route-map RTM_EXPORT_FROM_AS$MY_ASN deny 99
   description Export netwroks with specific BGP attributes
   match ipv6 address prefix-list PFL_ANY
