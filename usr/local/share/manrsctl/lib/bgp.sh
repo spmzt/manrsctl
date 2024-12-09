@@ -139,13 +139,14 @@ configure_bgp_get() {
 }
 
 network_bgp_get() {
-  echo " address-family ipv6 unicast"
+  echo " !
+ address-family ipv6 unicast"
 
   myself_prefixes_yml_get | while read prefix
   do
       echo "  network $prefix route-map RTM_EXPORT_FROM_AS$MY_ASN"
   done
-  echo "  exit"
+  echo " exit-address-family"
 }
 
 # Generate neighbor configuration for specific AS number ($1), its description ($2),
@@ -174,7 +175,8 @@ neighbor_ds_bgp_get() {
     echo " neighbor $neighbor peer-group $1"
   done
 
-  echo " address-family ipv6 unicast
+  echo " !
+ address-family ipv6 unicast
   neighbor $1 remove-private-AS
   neighbor $1 soft-reconfiguration inbound
   neighbor $1 route-map RTM_IMPORT_FROM_$1 in
@@ -185,7 +187,7 @@ neighbor_ds_bgp_get() {
   neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
   neighbor $1 maximum-prefix $3
   neighbor $1 activate
-  exit"
+ exit-address-family"
 }
 
 # Generate neighbor configuration for specific AS number ($1), its description ($2),
@@ -212,7 +214,8 @@ neighbor_ds_rev_bgp_get() {
     echo " neighbor $neighbor peer-group $1"
   done
 
-  echo " address-family ipv6 unicast
+  echo " !
+ address-family ipv6 unicast
   neighbor $1 remove-private-AS
   neighbor $1 soft-reconfiguration inbound
   neighbor $1 route-map RTM_IMPORT_FROM_$1 in
@@ -220,7 +223,7 @@ neighbor_ds_rev_bgp_get() {
   neighbor $1 prefix-list PFL_EXPORT_FROM_AS$MY_ASN out
   neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
   neighbor $1 activate
-  exit"
+ exit-address-family"
 }
 
 # Generate neighbor configuration for specific AS number ($1), its description ($2),
@@ -245,7 +248,8 @@ neighbor_ixp_bgp_get() {
     echo " no neighbor $neighbor enforce-first-as"
   done
 
-  echo " address-family ipv6 unicast
+  echo " !
+ address-family ipv6 unicast
   neighbor $1 remove-private-AS
   neighbor $1 soft-reconfiguration inbound
   neighbor $1 route-map RTM_IMPORT_FROM_$1 in
@@ -253,7 +257,7 @@ neighbor_ixp_bgp_get() {
   neighbor $1 prefix-list PFL_EXPORT_FROM_AS$MY_ASN out
   neighbor $1 maximum-prefix-out $MY_MAX_PREFIX
   neighbor $1 activate
-  exit"
+ exit-address-family"
 }
 
 # Generate all of the peer configurations

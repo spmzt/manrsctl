@@ -6,41 +6,41 @@ invalid_rtm_get() {
   echo "route-map RTM_INVALID_DENY deny 1
  description Drop Invalid RPKI
  match rpki invalid
- exit
+exit
 !
 route-map RTM_INVALID_DENY deny 2
  description Drop IPv6 Bogon Prefixlist
  match ipv6 address prefix-list PFL_BOGON
- exit
+exit
 !
 route-map RTM_INVALID_DENY deny 3
  description Drop IPv4 Bogon Prefixlist
  match ip address prefix-list PFL_V4_BOGON
- exit
+exit
 !
 route-map RTM_INVALID_DENY deny 4
  description Drop Bogon AS Path
  match as-path ASP_REV_BOGON
- exit
+exit
 !
 route-map RTM_INVALID_DENY deny 5
  description Drop Edrop AS Path
  match as-path ASP_REV_EDROP
- exit
+exit
 !
 route-map RTM_INVALID_DENY permit 99
  description call by other route-maps, permit anything
- exit"
+exit"
 }
 
 # Set no-export route-map
 no_export_rtm_get() {
   echo "route-map RTM_NO_EXPORT permit 10
  set community additive no-export
- exit
+exit
 !
 route-map RTM_NO_EXPORT permit 20
- exit"
+exit"
 }
 
 # Set blackhole route-map with local-preference 10, no-export, and next-hop 100::1
@@ -51,10 +51,10 @@ blackhole_rtm_get() {
  set ipv6 next-hop global 100::1
  set local-preference 10
  set community additive no-export
- exit
+exit
 !
 route-map RTM_BLACKHOLE permit 20
- exit"
+exit"
 }
 
 # Set local-pref as requested
@@ -63,25 +63,25 @@ prefmod_rtm_get() {
   echo "route-map RTM_PREFMOD permit 10
  match large-community CMS_PREFMOD_100
  set local-preference 100
- exit
+exit
 !
 route-map RTM_PREFMOD permit 20
  match large-community CMS_PREFMOD_200
  set local-preference 200
- exit
+exit
 !
 route-map RTM_PREFMOD permit 30
  match large-community CMS_PREFMOD_300
  set local-preference 300
- exit
+exit
 !
 route-map RTM_PREFMOD permit 40
  match large-community CMS_PREFMOD_400
  set local-preference 400
- exit
+exit
 !
 route-map RTM_PREFMOD permit 50
- exit"
+exit"
 }
 
 # Community actions to take on receipt of route.
@@ -91,21 +91,21 @@ cml_in_rtm_get() {
  description check for blackholing, no point continuing if it matches.
  match large-community CMS_BLACKHOLE
  call RTM_BLACKHOLE
- exit
+exit
 !
 route-map RTM_CML_IN permit 20
  match large-community CMS_NO_EXPORT
  call RTM_NO_EXPORT
  on-match next
- exit
+exit
 !
 route-map RTM_CML_IN permit 30
  match large-community CME_PREFMOD_RANGE
  call RTM_PREFMOD
- exit
+exit
 !
 route-map RTM_CML_IN permit 40
- exit"
+exit"
 }
 
 # Community actions to take when advertising a route.
@@ -116,24 +116,24 @@ route-map RTM_CML_IN permit 40
 flt_cml_ups_out_rtm_get() {
   echo "route-map RTM_CML_FLT_TO_UPS deny 10
  match large-community CMS_DS_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_UPS deny 20
  match large-community CMS_IXP_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_UPS deny 30
  match large-community CMS_PEERS_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_UPS permit 40
  match large-community CMS_UPS_NO_EXPORT
  call RTM_NO_EXPORT
  on-match next
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_UPS permit 99
- exit"
+exit"
 }
 
 # Deny routes to customers with upstream-only or ixp-only or peers-only set.
@@ -141,24 +141,24 @@ route-map RTM_CML_FLT_TO_UPS permit 99
 flt_cml_ds_out_rtm_get() {
   echo "route-map RTM_CML_FLT_TO_DS deny 10
  match large-community CMS_UPS_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_DS deny 20
  match large-community CMS_IXP_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_DS deny 30
  match large-community CMS_PEERS_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_DS permit 40
  match large-community CMS_DS_NO_EXPORT
  call RTM_NO_EXPORT
  on-match next
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_DS permit 99
- exit"
+exit"
 }
 
 # Deny routes to IXPs with upstream-only or downstream-only or peers-only set.
@@ -166,24 +166,24 @@ route-map RTM_CML_FLT_TO_DS permit 99
 flt_cml_ixp_out_rtm_get() {
   echo "route-map RTM_CML_FLT_TO_IXP deny 10
  match large-community CMS_UPS_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_IXP deny 20
  match large-community CMS_DS_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_IXP deny 30
  match large-community CMS_PEERS_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_IXP permit 40
  match large-community CMS_IXP_NO_EXPORT
  call RTM_NO_EXPORT
  on-match next
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_IXP permit 99
- exit"
+exit"
 }
 
 # Deny routes to peers with upstream-only or ixp-only or downstream-only set.
@@ -191,24 +191,24 @@ route-map RTM_CML_FLT_TO_IXP permit 99
 flt_cml_peers_out_rtm_get() {
   echo "route-map RTM_CML_FLT_TO_PEERS deny 10
  match large-community CMS_UPS_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_PEERS deny 20
  match large-community CMS_IXP_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_PEERS deny 30
  match large-community CMS_DS_ONLY
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_PEERS permit 40
  match large-community CMS_PEERS_NO_EXPORT
  call RTM_NO_EXPORT
  on-match next
- exit
+exit
 !
 route-map RTM_CML_FLT_TO_PEERS permit 99
- exit"
+exit"
 }
 
 # Upstream route-map for incomming communities
@@ -217,11 +217,11 @@ cml_ups_in_rtm_get() {
   echo "route-map RTM_UPS_IN permit 10
  call RTM_CML_IN
  on-match next
- exit
+exit
 !
 route-map RTM_UPS_IN permit 20
  set large-community $MY_ASN:1:3000 additive
- exit"
+exit"
 }
 
 # Downstream route-map for incomming communities
@@ -230,14 +230,14 @@ cml_ds_in_rtm_get() {
   echo "route-map RTM_DS_IN permit 10
  call RTM_CML_IN
  on-match next
- exit
+exit
 !
 route-map RTM_DS_IN permit 20
  set large-community $MY_ASN:1:3100 additive
- exit
+exit
 !
 route-map RTM_DS_IN permit 30
- exit"
+exit"
 }
 
 # Peers route-map for incomming communities
@@ -246,11 +246,11 @@ cml_peers_in_rtm_get() {
   echo "route-map RTM_PEER_IN permit 10
  call RTM_CML_IN
  on-match next
- exit
+exit
 !
 route-map RTM_PEER_IN permit 20
  set large-community $MY_ASN:1:3200 additive
- exit"
+exit"
 }
 
 # IXP route-map for incomming communities
@@ -259,11 +259,11 @@ cml_ixp_in_rtm_get() {
   echo "route-map RTM_IXP_IN permit 10
  call RTM_CML_IN
  on-match next
- exit
+exit
 !
 route-map RTM_IXP_IN permit 20
  set large-community $MY_ASN:1:3300 additive
- exit"
+exit"
 }
 
 # Generate import route-map for specific peer AS ($1) with downstream,
@@ -274,13 +274,13 @@ peers_in_rtm_get() {
  call RTM_INVALID_DENY
  description Drop Invalid Prefixes
  on-match next
- exit
+exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 5
  description Peer filter and communities
  call RTM_PEER_IN
  on-match next
- exit
+exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 10
  description Import any valid RPKI from $1
@@ -298,7 +298,7 @@ route-map RTM_IMPORT_FROM_$1 permit 10
     echo " set large-community $MY_ASN:$3 additive"
   fi
 
-  echo " exit
+  echo "exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 20
  description Import any prefix that not found in RPKI db from $1 with lower pref
@@ -316,12 +316,12 @@ route-map RTM_IMPORT_FROM_$1 permit 20
     echo " set large-community $MY_ASN:$5 additive"
   fi
 
-  echo " exit
+  echo "exit
 !
 route-map RTM_IMPORT_FROM_$1 deny 99
  description Reject any prefix from $1
  match ipv6 address prefix-list PFL_ANY
- exit"
+exit"
 }
 
 # Generate import route-map for specific downstream AS ($1) with downstream,
@@ -332,13 +332,13 @@ downstream_in_rtm_get() {
  call RTM_INVALID_DENY
  description Drop Invalid Prefixes
  on-match next
- exit
+exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 5
  description Downstream filter and communities
  call RTM_DS_IN
  on-match next
- exit
+exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 10
  description Import any valid RPKI from $1
@@ -356,7 +356,7 @@ route-map RTM_IMPORT_FROM_$1 permit 10
     echo " set large-community $MY_ASN:$3 additive"
   fi
   
-  echo " exit
+  echo "exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 20
  description Import any prefix that not found in RPKI db from $1 with lower pref
@@ -374,12 +374,12 @@ route-map RTM_IMPORT_FROM_$1 permit 20
     echo " set large-community $MY_ASN:$5 additive"
   fi
   
-  echo " exit
+  echo "exit
 !
 route-map RTM_IMPORT_FROM_$1 deny 99
  description Reject any prefix from $1
  match ipv6 address prefix-list PFL_ANY
- exit"
+exit"
 }
 
 # Generate import route-map from upstream $1 without downstream,
@@ -390,13 +390,13 @@ upstream_in_rtm_get() {
  call RTM_INVALID_DENY
  description Drop Invalid Prefixes
  on-match next
- exit
+exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 5
  description Upstream filter and communities
  call RTM_UPS_IN
  on-match next
- exit
+exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 10
  description Import any valid RPKI from $1
@@ -412,7 +412,7 @@ route-map RTM_IMPORT_FROM_$1 permit 10
     echo " set large-community $MY_ASN:$3 additive"
   fi
   
-  echo " exit
+  echo "exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 20
  description Import any prefix that not found in RPKI db from $1 with lower pref
@@ -428,12 +428,12 @@ route-map RTM_IMPORT_FROM_$1 permit 20
     echo " set large-community $MY_ASN:$5 additive"
   fi
   
-  echo " exit
+  echo "exit
 !
 route-map RTM_IMPORT_FROM_$1 deny 99
  description Reject any prefix from $1
  match ipv6 address prefix-list PFL_ANY
- exit"
+exit"
 }
 
 # Generate import route-map from IXP $1 without downstream,
@@ -444,13 +444,13 @@ ixp_in_rtm_get() {
  call RTM_INVALID_DENY
  description Drop Invalid Prefixes
  on-match next
- exit
+exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 5
  description IXP filter and communities
  call RTM_IXP_IN
  on-match next
- exit
+exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 10
  description Import any valid RPKI from $1
@@ -466,7 +466,7 @@ route-map RTM_IMPORT_FROM_$1 permit 10
     echo " set large-community $MY_ASN:$3 additive"
   fi
   
-  echo " exit
+  echo "exit
 !
 route-map RTM_IMPORT_FROM_$1 permit 20
  description Import any prefix that not found in RPKI db from $1 with lower pref
@@ -482,12 +482,12 @@ route-map RTM_IMPORT_FROM_$1 permit 20
     echo " set large-community $MY_ASN:$5 additive"
   fi
   
-  echo " exit
+  echo "exit
 !
 route-map RTM_IMPORT_FROM_$1 deny 99
  description Reject any prefix from $1
  match ipv6 address prefix-list PFL_ANY
- exit"
+exit"
 }
 
 # Generate export route-map to downstream $1
@@ -496,13 +496,13 @@ downstream_out_rtm_get() {
  call RTM_INVALID_DENY
  description Drop Invalid Prefixes
  on-match next
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 5
  description Drop Filtered Prefixes
  call RTM_CML_FLT_TO_DS
  on-match next
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
  description Export netwroks with valid RPKI"
@@ -514,18 +514,18 @@ route-map RTM_EXPORT_TO_$1 permit 10
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
  match rpki valid
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to Downstream
  match large-community CMS_LEARNT_DS
  match rpki valid
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 deny 99
  description Export netwroks with specific BGP attributes
  match ipv6 address prefix-list PFL_ANY
- exit"
+exit"
 }
 
 # Generate export route-map to IXP $1
@@ -534,13 +534,13 @@ ixp_out_rtm_get() {
  description Drop Invalid Prefixes
  call RTM_INVALID_DENY
  on-match next
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 5
  description Drop Filtered Prefixes
  call RTM_CML_FLT_TO_IXP
  on-match next
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
  description Export netwroks with valid RPKI"
@@ -552,18 +552,18 @@ route-map RTM_EXPORT_TO_$1 permit 10
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
  match rpki valid
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to IXP
  match large-community CMS_LEARNT_DS
  match rpki valid
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 deny 99
  description Export netwroks with specific BGP attributes
  match ipv6 address prefix-list PFL_ANY
- exit"
+exit"
 }
 
 # Generate export route-map to peer $1
@@ -572,13 +572,13 @@ peers_out_rtm_get() {
  description Drop Invalid Prefixes
  call RTM_INVALID_DENY
  on-match next
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 5
  description Drop Filtered Prefixes
  call RTM_CML_FLT_TO_PEERS
  on-match next
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
  description Export netwroks with valid RPKI"
@@ -590,18 +590,18 @@ route-map RTM_EXPORT_TO_$1 permit 10
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
  match rpki valid
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to peers
  match large-community CMS_LEARNT_DS
  match rpki valid
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 deny 99
  description Export netwroks with specific BGP attributes
  match ipv6 address prefix-list PFL_ANY
- exit"
+exit"
 }
 
 # Generate export route-map to upstream $1
@@ -610,13 +610,13 @@ upstream_out_rtm_get() {
  description Drop Invalid Prefixes
  call RTM_INVALID_DENY
  on-match next
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 5
  description Drop Filtered Prefixes
  call RTM_CML_FLT_TO_UPS
  on-match next
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
  description Export netwroks with valid RPKI"
@@ -628,18 +628,18 @@ route-map RTM_EXPORT_TO_$1 permit 10
 
  echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
  match rpki valid
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to upstreams
  match large-community CMS_LEARNT_DS
  match rpki valid
- exit
+exit
 !
 route-map RTM_EXPORT_TO_$1 deny 99
  description Export netwroks with specific BGP attributes
  match ipv6 address prefix-list PFL_ANY
- exit"
+exit"
 }
 
 # Generate export route-map of your asn.
@@ -648,7 +648,7 @@ my_out_rtm_get() {
  description Drop Invalid Prefixes
  call RTM_INVALID_DENY
  on-match next
- exit
+exit
 !
 route-map RTM_EXPORT_FROM_AS$MY_ASN permit 10
  description Export netwroks with specific BGP attributes
@@ -660,18 +660,18 @@ route-map RTM_EXPORT_FROM_AS$MY_ASN permit 10
   echo " set large-community $MY_ASN:$CML_MY_PREFIX additive"
  fi
 
- echo " exit
+ echo "exit
 !
 route-map RTM_EXPORT_FROM_AS$MY_ASN permit 20
  description Export our netwroks with not working rpki as separate rule
  match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
  match rpki notfound
- exit
+exit
 !
 route-map RTM_EXPORT_FROM_AS$MY_ASN deny 99
  description Export netwroks with specific BGP attributes
  match ipv6 address prefix-list PFL_ANY
- exit"
+exit"
 }
 
 action_static_rtm_list() {
