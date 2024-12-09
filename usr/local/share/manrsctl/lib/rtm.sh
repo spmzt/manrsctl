@@ -507,9 +507,9 @@ route-map RTM_EXPORT_TO_$1 permit 5
 route-map RTM_EXPORT_TO_$1 permit 10
   description Export netwroks with valid RPKI"
 
- if [ -n "$CML_OWN_PREFIX" ];
+ if [ -n "$CML_MY_PREFIX" ];
  then
-  echo "  match large-community CML_OWN_PREFIX"
+  echo "  match large-community CML_MY_PREFIX"
  fi
 
  echo "  match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
@@ -545,9 +545,9 @@ route-map RTM_EXPORT_TO_$1 permit 5
 route-map RTM_EXPORT_TO_$1 permit 10
   description Export netwroks with valid RPKI"
 
- if [ -n "$CML_OWN_PREFIX" ];
+ if [ -n "$CML_MY_PREFIX" ];
  then
-  echo "  match large-community CML_OWN_PREFIX"
+  echo "  match large-community CML_MY_PREFIX"
  fi
 
  echo "  match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
@@ -583,9 +583,9 @@ route-map RTM_EXPORT_TO_$1 permit 5
 route-map RTM_EXPORT_TO_$1 permit 10
   description Export netwroks with valid RPKI"
 
- if [ -n "$CML_OWN_PREFIX" ];
+ if [ -n "$CML_MY_PREFIX" ];
  then
-  echo "  match large-community CML_OWN_PREFIX"
+  echo "  match large-community CML_MY_PREFIX"
  fi
 
  echo "  match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
@@ -621,9 +621,9 @@ route-map RTM_EXPORT_TO_$1 permit 5
 route-map RTM_EXPORT_TO_$1 permit 10
   description Export netwroks with valid RPKI"
 
- if [ -n "$CML_OWN_PREFIX" ];
+ if [ -n "$CML_MY_PREFIX" ];
  then
-  echo "  match large-community CML_OWN_PREFIX"
+  echo "  match large-community CML_MY_PREFIX"
  fi
 
  echo "  match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
@@ -655,7 +655,7 @@ route-map RTM_EXPORT_FROM_AS$MY_ASN permit 10
   match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
   match rpki valid"
 
- if [ -n "$CML_OWN_PREFIX" ];
+ if [ -n "$CML_MY_PREFIX" ];
  then
   echo "  set large-community $MY_ASN:$CML_MY_PREFIX additive"
  fi
