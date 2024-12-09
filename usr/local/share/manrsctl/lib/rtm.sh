@@ -660,8 +660,14 @@ route-map RTM_EXPORT_FROM_AS$MY_ASN permit 10
 !
 route-map RTM_EXPORT_FROM_AS$MY_ASN permit 20
  description Export our netwroks with not working rpki as separate rule
- match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
-exit
+ match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN"
+
+ if [ -n "$CML_MY_PREFIX" ];
+ then
+  echo " set large-community $MY_ASN:$CML_MY_PREFIX additive"
+ fi
+
+  echo "exit
 !
 route-map RTM_EXPORT_FROM_AS$MY_ASN deny 99
  description Export netwroks with specific BGP attributes
