@@ -5,10 +5,10 @@ default_v4_bgp_get() {
 	then
 		if [ "True" = "$(parse_yml get-value config.me.bgp.default-ipv4)" ];
 		then
-			print_bgp "  bgp default ipv4-unicast"
+			echo "  bgp default ipv4-unicast"
 		elif  [ "False" = "$(parse_yml get-value config.me.bgp.default-ipv4)" ];
 		then
-			print_bgp "  no bgp default ipv4-unicast"
+			echo "  no bgp default ipv4-unicast"
 		fi
 	fi
 }
@@ -18,10 +18,10 @@ default_bgp_get() {
 	then
 		if [ "True" = "$(parse_yml get-value config.me.bgp.default-ipv6)" ];
 		then
-			print_bgp "  bgp default ipv6-unicast"
+			echo "  bgp default ipv6-unicast"
 		elif  [ "False" = "$(parse_yml get-value config.me.bgp.default-ipv6)" ];
 		then
-			print_bgp "  no bgp default ipv6-unicast"
+			echo "  no bgp default ipv6-unicast"
 		fi
 	fi
 }
@@ -31,10 +31,10 @@ suppress_pending_bgp_get() {
 	then
 		if [ "True" = "$(parse_yml get-value config.me.bgp.suppress-fib-pending)" ];
 		then
-			print_bgp "  bgp suppress-fib-pending"
+			echo "  bgp suppress-fib-pending"
 		elif  [ "False" = "$(parse_yml get-value config.me.bgp.suppress-fib-pending)" ];
 		then
-			print_bgp "  no bgp suppress-fib-pending"
+			echo "  no bgp suppress-fib-pending"
 		fi
 	fi
 }
@@ -44,10 +44,10 @@ enforce_first_as_bgp_get() {
 	then
 		if [ "True" = "$(parse_yml get-value config.me.bgp.enforce-first-as)" ];
 		then
-			print_bgp "  bgp enforce-first-as"
+			echo "  bgp enforce-first-as"
 		elif  [ "False" = "$(parse_yml get-value config.me.bgp.enforce-first-as)" ];
 		then
-			print_bgp "  no bgp enforce-first-as"
+			echo "  no bgp enforce-first-as"
 		fi
 	fi
 }
@@ -57,10 +57,10 @@ graceful_restart_as_bgp_get() {
 	then
 		if [ "True" = "$(parse_yml get-value config.me.bgp.graceful-restart)" ];
 		then
-			print_bgp "  bgp graceful-restart"
+			echo "  bgp graceful-restart"
 		elif  [ "False" = "$(parse_yml get-value config.me.bgp.graceful-restart)" ];
 		then
-			print_bgp "  no bgp graceful-restart"
+			echo "  no bgp graceful-restart"
 		fi
 	fi
 }
@@ -70,10 +70,10 @@ net_import_check_as_bgp_get() {
 	then
 		if [ "True" = "$(parse_yml get-value config.me.bgp.import-check)" ];
 		then
-			print_bgp "  bgp network import-check"
+			echo "  bgp network import-check"
 		elif  [ "False" = "$(parse_yml get-value config.me.bgp.import-check)" ];
 		then
-			print_bgp "  no bgp network import-check"
+			echo "  no bgp network import-check"
 		fi
 	fi
 }
@@ -86,10 +86,10 @@ connected_check_bgp_get() {
     then
       if [ "True" = "$(parse_yml get-value config.$peer_type.$1.disable-connected-check)" ];
       then
-        print_bgp "  neighbor $1 disable-connected-check"
+        echo "  neighbor $1 disable-connected-check"
       elif  [ "False" = "$(parse_yml get-value config.$peer_type.$1.disable-connected-check)" ];
       then
-        print_bgp "  no neighbor $1 disable-connected-check"
+        echo "  no neighbor $1 disable-connected-check"
       fi
     fi
   done
@@ -101,7 +101,7 @@ ebgp_multihop_bgp_get() {
 	do
     if [ -n "$(parse_yml get-value config.$peer_type.$1.ebgp-multihop 2> /dev/null)" ];
     then
-        print_bgp "  neighbor $1 ebgp-multihop $(parse_yml get-value config.$peer_type.$1.ebgp-multihop)"
+        echo "  neighbor $1 ebgp-multihop $(parse_yml get-value config.$peer_type.$1.ebgp-multihop)"
     fi
   done
 }
@@ -114,10 +114,10 @@ addpath_tx_all_bgp_get() {
     then
       if [ "True" = "$(parse_yml get-value config.$peer_type.$1.addpath-tx-all-paths)" ];
       then
-        print_bgp "  neighbor $1 addpath-tx-all-paths"
+        echo "  neighbor $1 addpath-tx-all-paths"
       elif  [ "False" = "$(parse_yml get-value config.$peer_type.$1.addpath-tx-all-paths)" ];
       then
-        print_bgp "  no neighbor $1 addpath-tx-all-paths"
+        echo "  no neighbor $1 addpath-tx-all-paths"
       fi
     fi
   done
@@ -126,7 +126,7 @@ addpath_tx_all_bgp_get() {
 configure_bgp_get() {
   if [ -n "$BGP_RID" ];
   then
-    print_bgp "  bgp router-id $BGP_RID"
+    echo "  bgp router-id $BGP_RID"
   fi
 
   default_bgp_get
@@ -141,7 +141,7 @@ configure_bgp_get() {
 network_bgp_get() {
   myself_prefixes_yml_get | while read prefix
   do
-      print_bgp "  network $prefix route-map RTM_EXPORT_FROM_AS$MY_ASN"
+      echo "  network $prefix route-map RTM_EXPORT_FROM_AS$MY_ASN"
   done
 }
 
@@ -150,7 +150,7 @@ network_bgp_get() {
 # and optionally its neighbors ($4), and update-source ($5)
 neighbor_ds_bgp_get() {
   ASN="$(as_num_base_get $1)"
-  print_bgp "  neighbor $1 peer-group
+  echo "  neighbor $1 peer-group
   neighbor $1 description ---------- $2 ----------
   neighbor $1 remote-as $ASN
   neighbor $1 send-community both
@@ -159,7 +159,7 @@ neighbor_ds_bgp_get() {
 
   if [ -n "$5" ];
   then
-    print_bgp "  neighbor $1 update-source $5"
+    echo "  neighbor $1 update-source $5"
   fi
 
   connected_check_bgp_get $1
@@ -168,10 +168,10 @@ neighbor_ds_bgp_get() {
 
   for neighbor in $4
   do
-    print_bgp "  neighbor $neighbor peer-group $1"
+    echo "  neighbor $neighbor peer-group $1"
   done
 
-  print_bgp "  address-family ipv6 unicast
+  echo "  address-family ipv6 unicast
     neighbor $1 remove-private-AS
     neighbor $1 soft-reconfiguration inbound
     neighbor $1 route-map RTM_IMPORT_FROM_$1 in
@@ -189,7 +189,7 @@ neighbor_ds_bgp_get() {
 # and optionally its neighbors ($3), and update-source ($4)
 neighbor_ds_rev_bgp_get() {
   ASN="$(as_num_base_get $1)"
-  print_bgp "  neighbor $1 peer-group
+  echo "  neighbor $1 peer-group
   neighbor $1 description ---------- $2 ----------
   neighbor $1 remote-as $ASN
   neighbor $1 send-community both
@@ -198,7 +198,7 @@ neighbor_ds_rev_bgp_get() {
 
   if [ -n "$4" ];
   then
-    print_bgp "  neighbor $1 update-source $4"
+    echo "  neighbor $1 update-source $4"
   fi
 
   connected_check_bgp_get $1
@@ -206,10 +206,10 @@ neighbor_ds_rev_bgp_get() {
 
   for neighbor in $3
   do
-    print_bgp "  neighbor $neighbor peer-group $1"
+    echo "  neighbor $neighbor peer-group $1"
   done
 
-  print_bgp "  address-family ipv6 unicast
+  echo "  address-family ipv6 unicast
     neighbor $1 remove-private-AS
     neighbor $1 soft-reconfiguration inbound
     neighbor $1 route-map RTM_IMPORT_FROM_$1 in
@@ -224,7 +224,7 @@ neighbor_ds_rev_bgp_get() {
 # and optionally its neighbors ($3), and update-source ($4)
 neighbor_ixp_bgp_get() {
   ASN="$(as_num_base_get $1)"
-  print_bgp "  neighbor $1 peer-group
+  echo "  neighbor $1 peer-group
   neighbor $1 description ---------- IXP: $2 ----------
   neighbor $1 remote-as $ASN
   neighbor $1 send-community both
@@ -233,16 +233,16 @@ neighbor_ixp_bgp_get() {
 
   if [ -n "$4" ];
   then
-    print_bgp "  neighbor $1 update-source $4"
+    echo "  neighbor $1 update-source $4"
   fi
 
   for neighbor in $3
   do
-    print_bgp "  neighbor $neighbor peer-group $1"
-    print_bgp "  no neighbor $neighbor enforce-first-as"
+    echo "  neighbor $neighbor peer-group $1"
+    echo "  no neighbor $neighbor enforce-first-as"
   done
 
-  print_bgp "  address-family ipv6 unicast
+  echo "  address-family ipv6 unicast
     neighbor $1 remove-private-AS
     neighbor $1 soft-reconfiguration inbound
     neighbor $1 route-map RTM_IMPORT_FROM_$1 in
@@ -259,44 +259,44 @@ neighbor_bgp_get() {
     do
         neighbor_ds_bgp_get $peer "$(peer_description_yml_get $peer)" \
         "$(peer_max_prefix_yml_get $peer)" "$(neighbors_yml_get $peer)"
-        print_bgp !
+        echo !
     done
 
     upstream_peer_type_yml_get | while read peer
     do
         neighbor_ds_rev_bgp_get $peer "$(peer_description_yml_get $peer)" \
         "$(neighbors_yml_get $peer)" "$(upd_src_yml_get $peer)"
-        print_bgp !
+        echo !
     done
 
     ixp_peer_type_yml_get | while read peer
     do
         neighbor_ixp_bgp_get $peer "$(peer_description_yml_get $peer)" \
         "$(neighbors_yml_get $peer)" "$(upd_src_yml_get $peer)"
-        print_bgp !
+        echo !
     done
 }
 
 neighbor_bgp_list() {
-  print_bgp "router bgp $MY_ASN"
+  echo "router bgp $MY_ASN"
 
     # Configuration of peers
     neighbor_bgp_get
 
-    print_bgp "  exit"
+    echo "  exit"
 }
 
 network_bgp_list() {
-    print_bgp "router bgp $MY_ASN"
+    echo "router bgp $MY_ASN"
 
     # Configuration of network advertisements
     network_bgp_get
-    print_bgp "  exit"
+    echo "  exit"
 }
 
 # Generate all of the peer configurations
 full_bgp_list() {
-    print_bgp "router bgp $MY_ASN"
+    echo "router bgp $MY_ASN"
     # Configuration of BGP
     configure_bgp_get
 
@@ -305,5 +305,5 @@ full_bgp_list() {
 
     # Configuration of peers
     neighbor_bgp_get
-    print_bgp "  exit"
+    echo "  exit"
 }
