@@ -505,15 +505,22 @@ route-map RTM_EXPORT_TO_$1 permit 5
 exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
- description Export netwroks with valid RPKI"
+ description Export netwroks with valid RPKI
+ match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN"
 
  if [ -n "$CML_MY_PREFIX" ];
  then
   echo " match large-community CMS_OWN_PREFIX"
  fi
 
- echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
-exit
+ if [ -n "$(prepend_yml_get $1)" ];
+ then
+  echo -n " set as-path prepend"
+  printf " $MY_ASN%.0s" $(seq 1 `prepend_yml_get $1`)
+  echo
+ fi
+
+ echo "exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to Downstream
@@ -541,15 +548,22 @@ route-map RTM_EXPORT_TO_$1 permit 5
 exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
- description Export netwroks with valid RPKI"
+ description Export netwroks with valid RPKI
+ match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN"
 
  if [ -n "$CML_MY_PREFIX" ];
  then
   echo " match large-community CMS_OWN_PREFIX"
  fi
 
- echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
-exit
+ if [ -n "$(prepend_yml_get $1)" ];
+ then
+  echo -n " set as-path prepend"
+  printf " $MY_ASN%.0s" $(seq 1 `prepend_yml_get $1`)
+  echo
+ fi
+
+ echo "exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to IXP
@@ -562,7 +576,7 @@ route-map RTM_EXPORT_TO_$1 deny 99
 exit"
 }
 
-# Generate export route-map to peer $1
+# Generate export route-map to peer $1 and optionally prepend ($2)
 peers_out_rtm_get() {
   echo "route-map RTM_EXPORT_TO_$1 permit 1
  description Drop Invalid Prefixes
@@ -577,15 +591,22 @@ route-map RTM_EXPORT_TO_$1 permit 5
 exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
- description Export netwroks with valid RPKI"
+ description Export netwroks with valid RPKI
+ match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN"
 
  if [ -n "$CML_MY_PREFIX" ];
  then
   echo " match large-community CMS_OWN_PREFIX"
  fi
 
- echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
-exit
+ if [ -n "$(prepend_yml_get $1)" ];
+ then
+  echo -n " set as-path prepend"
+  printf " $MY_ASN%.0s" $(seq 1 `prepend_yml_get $1`)
+  echo
+ fi
+
+ echo "exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to peers
@@ -598,7 +619,7 @@ route-map RTM_EXPORT_TO_$1 deny 99
 exit"
 }
 
-# Generate export route-map to upstream $1
+# Generate export route-map to upstream $1 and optionally prepend ($2)
 upstream_out_rtm_get() {
   echo "route-map RTM_EXPORT_TO_$1 permit 1
  description Drop Invalid Prefixes
@@ -613,15 +634,22 @@ route-map RTM_EXPORT_TO_$1 permit 5
 exit
 !
 route-map RTM_EXPORT_TO_$1 permit 10
- description Export netwroks with valid RPKI"
+ description Export netwroks with valid RPKI
+ match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN"
 
  if [ -n "$CML_MY_PREFIX" ];
  then
   echo " match large-community CMS_OWN_PREFIX"
  fi
 
- echo " match ipv6 address prefix-list PFL_EXPORT_FROM_AS$MY_ASN
-exit
+ if [ -n "$(prepend_yml_get $1)" ];
+ then
+  echo -n " set as-path prepend"
+  printf " $MY_ASN%.0s" $(seq 1 `prepend_yml_get $1`)
+  echo
+ fi
+
+ echo "exit
 !
 route-map RTM_EXPORT_TO_$1 permit 20
  description customer routes are provided to upstreams

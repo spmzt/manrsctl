@@ -126,6 +126,7 @@ For each peer configuration, optionally you can specify these parameters below:
 - `upd-src`: (optional) Source IP address of your BGP
 - `disable-connected-check`: (optional) can be true or false (e.g: `neighbor ASx disable-connected-check`).  (except for IXP peers)
 - `ebgp-multihop`: (optional) TTL value of BGP Packets (except for IXP peers)
+- `prepend`: (optional) how many times should I prepend myself?
 
 Note: `disable-connected-check` and `ebgp-multihop` will not apply to IXP peers
 

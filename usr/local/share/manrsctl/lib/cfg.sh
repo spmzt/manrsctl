@@ -133,31 +133,35 @@ syntax_yml_check() {
 					do
 						case $attr_ups_keys in
 							"description")
-								empty_value_yml_check config.upstream.$ups_keys.description
+								empty_value_yml_check config.upstream.$ups_keys.$attr_ups_keys
 								continue
 								;;
 							"neighbors")
-								empty_value_yml_check config.upstream.$ups_keys.neighbors
+								empty_value_yml_check config.upstream.$ups_keys.$attr_ups_keys
 								continue
 								;;
 							"upd-src")
-								empty_value_yml_check config.upstream.$ups_keys.upd-src
+								empty_value_yml_check config.upstream.$ups_keys.$attr_ups_keys
 								continue
 								;;
 							"valid")
-								empty_value_yml_check config.upstream.$ups_keys.valid
+								empty_value_yml_check config.upstream.$ups_keys.$attr_ups_keys
 								continue
 								;;
 							"notfound")
-								empty_value_yml_check config.upstream.$ups_keys.notfound
+								empty_value_yml_check config.upstream.$ups_keys.$attr_ups_keys
 								continue
 								;;
 							"disable-connected-check")
-								empty_value_yml_check config.upstream.$ups_keys.disable-connected-check
+								empty_value_yml_check config.upstream.$ups_keys.$attr_ups_keys
 								continue
 								;;
 							"ebgp-multihop")
-								empty_value_yml_check config.upstream.$ups_keys.ebgp-multihop
+								empty_value_yml_check config.upstream.$ups_keys.$attr_ups_keys
+								continue
+								;;
+							"prepend")
+								empty_value_yml_check config.upstream.$ups_keys.$attr_ups_keys
 								continue
 								;;
 							*)
@@ -177,43 +181,47 @@ syntax_yml_check() {
 					do
 						case $attr_ds_keys in
 							"description")
-								empty_value_yml_check config.downstream.$ds_keys.description
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							"as-set")
-								empty_value_yml_check config.downstream.$ds_keys.as-set
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							"max-prefix")
-								empty_value_yml_check config.downstream.$ds_keys.max-prefix
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							"neighbors")
-								empty_value_yml_check config.downstream.$ds_keys.neighbors
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							"upd-src")
-								empty_value_yml_check config.downstream.$ds_keys.upd-src
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							"valid")
-								empty_value_yml_check config.downstream.$ds_keys.valid
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							"notfound")
-								empty_value_yml_check config.downstream.$ds_keys.notfound
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							"disable-connected-check")
-								empty_value_yml_check config.downstream.$ds_keys.disable-connected-check
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							"ebgp-multihop")
-								empty_value_yml_check config.downstream.$ds_keys.ebgp-multihop
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							"addpath-tx-all-paths")
-								empty_value_yml_check config.downstream.$ds_keys.addpath-tx-all-paths
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
+								continue
+								;;
+							"prepend")
+								empty_value_yml_check config.downstream.$ds_keys.$attr_ds_keys
 								continue
 								;;
 							*)
@@ -249,6 +257,10 @@ syntax_yml_check() {
 								continue
 								;;
 							"notfound")
+								empty_value_yml_check config.ixp.$ixp_keys.$attr_ixp_keys
+								continue
+								;;
+							"prepend")
 								empty_value_yml_check config.ixp.$ixp_keys.$attr_ixp_keys
 								continue
 								;;
@@ -305,6 +317,10 @@ syntax_yml_check() {
 								continue
 								;;
 							"addpath-tx-all-paths")
+								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
+								continue
+								;;
+							"prepend")
 								empty_value_yml_check config.peers.$peers_keys.$attr_peers_keys
 								continue
 								;;
@@ -595,6 +611,18 @@ upd_src_yml_get() {
 		if [ -n "$(parse_yml get-value config.$peer_type.$1.upd-src 2> /dev/null)" ];
 		then
 			parse_yml get-value config.$peer_type.$1.upd-src
+			return
+		fi
+	done
+}
+
+# Get prepend as from configuration file
+prepend_yml_get() {
+	for peer_type in $(peer_type_yml_get)
+	do
+		if [ -n "$(parse_yml get-value config.$peer_type.$1.prepend 2> /dev/null)" ];
+		then
+			parse_yml get-value config.$peer_type.$1.prepend
 			return
 		fi
 	done
