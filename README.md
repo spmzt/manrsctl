@@ -290,3 +290,4 @@ Add EDROP:
 
 - <https://www.spamhaus.org/drop/drop_v6.json>
 - <https://www.spamhaus.org/drop/drop_v4.json>
+- <https://www.spamhaus.org/drop/asndrop.json>
